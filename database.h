@@ -25,8 +25,8 @@ public:
 	Database();
 	
 	// functions
-	void addTable();
-	void deleteTable();
+	void addTable(Table table, String tableName);
+	void deleteTable(String tableName);
 	vector<String>[] listTables();						// returns names of tables
 	vector<Table>[] getTables();						// returns actual tables
 	Table query(string querycmd);
@@ -37,6 +37,7 @@ class Table
 {
 private:
 	// members
+	String name;
 	vector<Record> records;								// has list of records
 	vector<AttributeTypeTuple>[] attributesAndTypes;	// also has list of its aTTs for records
 	
@@ -46,6 +47,7 @@ public:
 	Table(vector<AttributeTypeTuple>[] aTTs): attributesAndTypes(aTTs) { }
 	
 	// functions
+	void getName();
 	void add(AttributeTypeTuple aTT);
 	void deleteATT(AttributeTypeTuple aTT);
 	void addRecord(Record record);
@@ -59,7 +61,7 @@ public:
 	Table crossJoin(Table& otherTable);
 	
 	Record operator[](int i) const;		// iterate through records
-    Record & operator[](int i);			// iterate through records
+    	Record & operator[](int i);			// iterate through records
 	
 }
 	
@@ -80,7 +82,7 @@ public:
 	Type getType();
 }
 
-class Record
+class Record // FIX
 {
 private:
 	// members
@@ -95,7 +97,7 @@ public:
 	void removeValue(int i);
 	void getValue(int i);
 	Type operator[](int i) const;		// iterate through values
-    Type & operator[](int i);			// iterate through values
+    	Type & operator[](int i);			// iterate through values
 }
 
 class TableIterator
