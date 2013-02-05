@@ -10,10 +10,11 @@
  /** INCLUDES **/
  
 #include <vector>
- 
-/** CLASSES **/
- 
-// main classes
+#include <exception>
+#include <stdexcept>
+  
+/** MAIN CLASSES **/
+
 class Database
 {
 private:
@@ -23,13 +24,14 @@ private:
 public:
 	// constructor
 	Database();
+	~Database();
 	
 	// functions
-	void addTable(Table table, String tableName);
-	void deleteTable(String tableName);
-	vector<String>[] listTables();						// returns names of tables
+	void addTable(Table table, string tableName);
+	void dropTable(string tableName);
+	vector<string>[] listTables();						// returns names of tables
 	vector<Table>[] getTables();						// returns actual tables
-	Table query(string querycmd);
+	Table query(string queryCmd);
 	void deleteQuery(string querycmd);					// opposite of query()
 }
 
@@ -37,7 +39,7 @@ class Table
 {
 private:
 	// members
-	String name;
+	string name;
 	vector<Record> records;								// has list of records
 	vector<AttributeTypeTuple>[] attributesAndTypes;	// also has list of its aTTs for records
 	
@@ -45,28 +47,49 @@ public:
 	// constructor
 	Table();
 	Table(vector<AttributeTypeTuple>[] aTTs): attributesAndTypes(aTTs) { }
+	~Table();
 	
 	// functions
 	void getName();
 	void add(AttributeTypeTuple aTT);
-	void deleteATT(AttributeTypeTuple aTT);
-	void addRecord(Record record);
+	void deleteATT(string attributeName);
+	void insert(Record record);
 	vector<AttributeTypeTuple>[] getAttributes();
 	int getSize();
-	void rename(String originalName, String newName);
-	int sum(String attribute);
-	int count(String attribute);
-	int min(String attribute);
-	int max(String attribute);
+	void rename(string originalName, string newName);
+	int sum(string attribute);
+	int count(string attribute);
+	int min(string attribute);
+	int max(string attribute);
 	Table crossJoin(Table& otherTable);
 	
 	Record operator[](int i) const;		// iterate through records
-    	Record & operator[](int i);			// iterate through records
+    Record & operator[](int i);			// iterate through records
 	
 }
+
+class Record
+{
+private:
+	// members
+	vector<Strings> values;
 	
-// helper classes
-class AttributeTypeTuple
+public:
+	// constructor
+	Record();
+	~Record();
+	
+	// functions
+	void addValue(string t);
+	void removeValue(int i);
+	string getValue(int i);
+	string operator[](int i) const;		// iterate through values
+    string & operator[](int i);			// iterate through values
+}
+	
+/** HELPER CLASSES **/
+
+class AttributeTypeTuple				// attribute name and the type of the attribute, so tables can know what each column contains
 {
 private:
 	// members
@@ -76,28 +99,11 @@ private:
 public:
 	// constructor
 	AttributeTypeTuple(string a, Type t): attribute(a), type(t) { }
+	~AttributeTypeTuple();
 	
 	// functions
 	string getAttribute();
 	Type getType();
-}
-
-class Record // FIX
-{
-private:
-	// members
-	vector<Type> values;
-	
-public:
-	// constructor
-	Record();
-	
-	// functions
-	void addValue(Type t);
-	void removeValue(int i);
-	void getValue(int i);
-	Type operator[](int i) const;		// iterate through values
-    	Type & operator[](int i);			// iterate through values
 }
 
 class TableIterator
@@ -108,16 +114,23 @@ private:
 public:
 	// constructor
 	TableIterator(Table t);						// places iterator on first record
+	~TableIterator(Table t);
 	
 	// functions
 	void next();								// moves to next record
 	Record get();								// returns current record
 }
 
+class DatabaseError : public runtime_error 
+{
+public:
+	DatabaseError(const string& msg = "") : runtime_error(msg) { }
+}
+
 // classes for valid Types
 class Type;
 class Int : public Type;
 class Float : public Type;
-class String : public Type;
+class string : public Type;
 class Date : public Type;
  
