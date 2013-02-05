@@ -72,11 +72,12 @@ class Record
 {
 private:
 	// members
-	vector<Strings> values;
+	vector<string> values;
 	
 public:
 	// constructor
 	Record();
+	Record(vector<string> value);
 	~Record();
 	
 	// functions
@@ -131,6 +132,6 @@ public:
 class Type;
 class Int : public Type;
 class Float : public Type;
-class string : public Type;
+class String : public Type;
 class Date : public Type;
  
