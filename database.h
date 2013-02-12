@@ -53,8 +53,8 @@ private:
 public:
 	// constructor
 	Table();
-	Table(vector<AttributeTypeTuple> aTTs, string n): attributesAndTypes(aTTs) { }
-	//~Table();
+	Table(vector<AttributeTypeTuple> aTTs): attributesAndTypes(aTTs) { }
+	~Table();
 
 	// functions
 	string getName();

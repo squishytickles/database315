@@ -1,5 +1,9 @@
 #include "database.h"
 
+Table::~Table(){
+
+}
+
 string Table::getName(){
 	return name;
 }
@@ -38,4 +42,36 @@ void Table::rename(string originalName, string newName){
 		if(attributesAndTypes[i].getAttribute() == originalName)
 			attributesAndTypes[i].setAttribute(newName);
 	}
+}
+
+int Table::count(string attribute){
+	int index, count;
+	
+	for(int i=0; i<attributesAndTypes.size(); ++i){
+		if(attributesAndTypes[i].getAttribute() == attribute)
+			index = i;
+	}
+	
+	for(int i=0; i<records.size(); ++i){
+		if(records[i][index] != "")
+			++count;
+	}
+	
+	return count;
+}
+
+/*
+int sum(string attribute);
+int count(string attribute);
+int min(string attribute);
+int max(string attribute);
+*/
+
+Record Table::operator[](int i) const{
+	return records[i];
+}		
+
+
+Record & Table::operator[](int i){
+	return records[i];
 }

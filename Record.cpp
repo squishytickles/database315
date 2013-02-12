@@ -28,7 +28,3 @@ string Record::operator[](int i) const{
 string & Record::operator[](int i){
 	return values[i];
 }
-
-/*string operator[](int i) const;		// iterate through values
-    string & operator[](int i);	*/
-	
