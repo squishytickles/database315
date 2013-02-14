@@ -1,4 +1,4 @@
-#include "database.h"
+#include "Database.h"
 
 
 void Database::addTable(Table table, string tableName){
