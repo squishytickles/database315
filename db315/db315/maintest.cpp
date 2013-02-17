@@ -2,7 +2,7 @@
 
 #define BOOST_TEST_MAIN
 
-#include "database.h"
+#include "Database.h"
 #include <string>
 #include <vector>
 #include <boost/test/unit_test.hpp>

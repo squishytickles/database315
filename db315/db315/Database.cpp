@@ -8,7 +8,7 @@ void Database::addTable(Table table, string tableName){
 
 void Database::dropTable(string tableName){
 	for(int i=0; i<tables.size(); ++i){
-		if(tables[i].getName() == tableName)
+		if(tables[i].getName().compare(tableName) == 0)
 			tables.erase(tables.begin()+i);
 	}
 }

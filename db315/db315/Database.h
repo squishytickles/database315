@@ -4,8 +4,6 @@
  * Desc:		Header file for the database project
  */
  
- using namespace std;
- 
 #ifndef _DATABASE_H
 #define _DATABASE_H
  
@@ -21,6 +19,10 @@
 class Record;
 class AttributeTypeTuple;
 class Table;
+
+
+
+using namespace std;
 
 class Database
 {

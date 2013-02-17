@@ -1,4 +1,4 @@
-#include "database.h"
+#include "Database.h"
 
 Table::~Table(){
 
@@ -19,7 +19,7 @@ void Table::add(AttributeTypeTuple aTT){
 void Table::deleteATT(string attributeName){
 
 	for(int i=0; i<attributesAndTypes.size(); ++i){
-		if(attributesAndTypes[i].getAttribute() == attributeName){
+		if(attributesAndTypes[i].getAttribute().compare(attributeName) == 0){
 			attributesAndTypes.erase(attributesAndTypes.begin() + i);
 		}
 	}
@@ -39,21 +39,21 @@ int Table::getSize(){
 
 void Table::rename(string originalName, string newName){
 	for(int i=0; i<attributesAndTypes.size(); ++i){
-		if(attributesAndTypes[i].getAttribute() == originalName)
+		if(attributesAndTypes[i].getAttribute().compare(originalName))
 			attributesAndTypes[i].setAttribute(newName);
 	}
 }
 
 int Table::count(string attribute){
-	int index, count;
+	int index, count = 0;
 	
 	for(int i=0; i<attributesAndTypes.size(); ++i){
-		if(attributesAndTypes[i].getAttribute() == attribute)
+		if(attributesAndTypes[i].getAttribute().compare(attribute))
 			index = i;
 	}
 	
 	for(int i=0; i<records.size(); ++i){
-		if(records[i][index] != "")
+		if(records[i][index].compare("") != 0)
 			++count;
 	}
 	
