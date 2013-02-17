@@ -12,6 +12,7 @@
 #include <vector>
 #include <exception>
 #include <stdexcept>
+#include <sstream>
   
 /** MAIN CLASSES **/
 
@@ -66,10 +67,10 @@ public:
 	vector<AttributeTypeTuple> getAttributes();
 	int getSize();
 	void rename(string originalName, string newName);
-	int sum(string attribute);
+	float sum(string attribute);
 	int count(string attribute);
-	int min(string attribute);
-	int max(string attribute);
+	float min(string attribute);
+	float max(string attribute);
 	Table crossJoin(Table& otherTable);
 
 	Record operator[](int i) const;		// iterate through records

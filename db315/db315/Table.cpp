@@ -60,12 +60,115 @@ int Table::count(string attribute){
 	return count;
 }
 
-/*
-int sum(string attribute);
-int count(string attribute);
-int min(string attribute);
-int max(string attribute);
-*/
+
+float Table::sum(string attribute) {
+	int i, valueAt = -1;
+	float sum = 0;
+
+	for (i = 0; i < attributesAndTypes.size(); i ++) {
+		if (attributesAndTypes[i].getAttribute.compare(attribute) == 0)
+			valueAt = -1;
+
+	if (valueAt == -1)
+		throw Database_exception("Could not find attribute to sum!");
+
+	for (i = 0; i < records.size(); i ++) {
+		stringstream ss;
+		float toSum;
+
+		if (records[i].getValue(valueAt).compare("NULL") != 0) {
+			ss << records[i].getValue(valueAt);
+			ss >> toSum;
+			sum += toSum;
+		}
+	}
+
+	return sum;
+
+}
+
+int Table::count(string attribute) {
+	int i, valueAt = -1;
+	int sum = 0;
+
+	for (i = 0; i < attributesAndTypes.size(); i ++) {
+		if (attributesAndTypes[i].getAttribute.compare(attribute) == 0)
+			valueAt = -1;
+
+	if (valueAt == -1)
+		throw Database_exception("Could not find attribute to sum!");
+
+	for (i = 0; i < records.size(); i ++) {
+		stringstream ss;
+		float toSum;
+
+		if (records[i].getValue(valueAt).compare("NULL") != 0) {
+			ss << records[i].getValue(valueAt);
+			ss >> toSum;
+			sum += toSum;
+		}
+	}
+
+	return sum;
+
+}
+
+float Table::min(string attribute) {
+	int i, valueAt = -1;
+	int min = 0;
+
+	for (i = 0; i < attributesAndTypes.size(); i ++) {
+		if (attributesAndTypes[i].getAttribute.compare(attribute) == 0)
+			valueAt = -1;
+
+	if (valueAt == -1)
+		throw Database_exception("Could not find attribute to sum!");
+
+	for (i = 0; i < records.size(); i ++) {
+		stringstream ss;
+		float toMin;
+
+		if (records[i].getValue(valueAt).compare("NULL") != 0) {
+			ss << records[i].getValue(valueAt);
+			ss >> toMin;
+
+			if (toMin < min)
+				min = toMin;
+		}
+	}
+
+	return min;
+
+}
+
+float Table::max(string attribute) {
+	int i, valueAt = -1;
+	int max = 0;
+
+	for (i = 0; i < attributesAndTypes.size(); i ++) {
+		if (attributesAndTypes[i].getAttribute.compare(attribute) == 0)
+			valueAt = -1;
+
+	if (valueAt == -1)
+		throw Database_exception("Could not find attribute to sum!");
+
+	for (i = 0; i < records.size(); i ++) {
+		stringstream ss;
+		float toMin;
+
+		if (records[i].getValue(valueAt).compare("NULL") != 0) {
+			ss << records[i].getValue(valueAt);
+			ss >> toMax;
+
+			if (toMax > max)
+				max = toMax;
+		}
+	}
+
+	return max;
+
+}
+
 
 Record Table::operator[](int i) const{
 	return records[i];
