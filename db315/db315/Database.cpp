@@ -26,3 +26,16 @@ vector<string> Database::listTables(){
 vector<Table> Database::getTables(){
 	return tables;
 }
+
+Table query(string queryCmd) {
+	// split the query into the three appropriate parts
+	int i = 0, locFROM = -1, locWHERE = -1;
+	while (i<queryCmd.length) {
+		if (queryCmd.substr(i,4) == "FROM" && locFROM == 0) 
+			locFROM = i;
+		if (queryCmd.substr(i,5) == "WHERE" && locWHERE == 0) 
+			locWHERE = i;
+	}
+
+	if (locFROM = -1)
+		throw Database_exception("QUERY lacking a FROM clause");

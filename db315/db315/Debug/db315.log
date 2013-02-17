@@ -1,10 +1,13 @@
-﻿Build started 2/17/2013 1:42:47 PM.
-Project "E:\database315\db315\db315\db315.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2/17/2013 2:26:07 PM.
+Project "E:\database315\db315\db315\db315.vcxproj" on node 2 (Rebuild target(s)).
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt AttributeTypeTuple.cpp Database.cpp Record.cpp Table.cpp maintest.cpp
-  AttributeTypeTuple.cpp
-  Generating Code...
-  Compiling...
+  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt AttributeTypeTuple.cpp Database.cpp maintest.cpp Record.cpp Table.cpp
+  Table.cpp
+e:\database315\db315\db315\table.cpp(21): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(41): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(50): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(55): warning C4018: '<' : signed/unsigned mismatch
+  Record.cpp
   maintest.cpp
 e:\database315\db315\db315\maintest.cpp(27): warning C4018: '<' : signed/unsigned mismatch
 e:\database315\db315\db315\maintest.cpp(48): warning C4018: '<' : signed/unsigned mismatch
@@ -19,15 +22,10 @@ e:\database315\db315\db315\maintest.cpp(283): warning C4101: 'e' : unreferenced 
 e:\database315\db315\db315\maintest.cpp(465): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
 e:\database315\db315\db315\maintest.cpp(469): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
 e:\database315\db315\db315\maintest.cpp(473): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
-  Table.cpp
-e:\database315\db315\db315\table.cpp(21): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(41): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(50): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(55): warning C4018: '<' : signed/unsigned mismatch
-  Record.cpp
   Database.cpp
 e:\database315\db315\db315\database.cpp(10): warning C4018: '<' : signed/unsigned mismatch
 e:\database315\db315\db315\database.cpp(19): warning C4018: '<' : signed/unsigned mismatch
+  AttributeTypeTuple.cpp
   Generating Code...
 Link:
   C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\database315\db315\Debug\db315.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\database315\db315\Debug\db315.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\database315\db315\Debug\db315.lib" /MACHINE:X86 Debug\AttributeTypeTuple.obj
@@ -49,8 +47,8 @@ maintest.obj : error LNK2019: unresolved external symbol "public: __thiscall Tab
 maintest.obj : error LNK2019: unresolved external symbol "public: void __thiscall TableIterator::next(void)" (?next@TableIterator@@QAEXXZ) referenced in function "public: void __thiscall TableIterator_Create::test_method(void)" (?test_method@TableIterator_Create@@QAEXXZ)
 maintest.obj : error LNK2019: unresolved external symbol "public: class Record __thiscall TableIterator::get(void)" (?get@TableIterator@@QAE?AVRecord@@XZ) referenced in function "public: void __thiscall TableIterator_Create::test_method(void)" (?test_method@TableIterator_Create@@QAEXXZ)
 E:\database315\db315\Debug\db315.exe : fatal error LNK1120: 13 unresolved externals
-Done Building Project "E:\database315\db315\db315\db315.vcxproj" (Build target(s)) -- FAILED.
+Done Building Project "E:\database315\db315\db315\db315.vcxproj" (Rebuild target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:13.13
+Time Elapsed 00:00:10.80

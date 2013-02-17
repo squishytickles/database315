@@ -132,9 +132,10 @@ public:
 	Record get();								// returns current record
 };
 
-class runtime_error : public exception {
-public:
-	runtime_error(const string& message);
-};
+class Database_exception: public std::runtime_error{
+  public:
+   Database_exception():runtime_error("Fatal database exception encountered."){}
+   Database_exception(std::string msg):runtime_error(msg.c_str()){}
+ };
 
  #endif
