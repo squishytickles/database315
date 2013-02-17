@@ -1,0 +1,48 @@
+﻿Build started 2/17/2013 1:24:49 PM.
+Project "E:\database315\db315\db315\db315.vcxproj" on node 2 (Build target(s)).
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt AttributeTypeTuple.cpp Database.cpp maintest.cpp Record.cpp Table.cpp
+  Table.cpp
+e:\database315\db315\db315\table.cpp(21): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(22): error C2678: binary '==' : no operator found which takes a left-hand operand of type 'std::string' (or there is no acceptable conversion)
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(507): could be 'bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(512): or       'bool std::operator ==(std::nullptr_t,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(517): or       'bool std::operator ==(const std::exception_ptr &,std::nullptr_t)'
+          while trying to match the argument list '(std::string, std::string)'
+e:\database315\db315\db315\table.cpp(41): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(42): error C2678: binary '==' : no operator found which takes a left-hand operand of type 'std::string' (or there is no acceptable conversion)
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(507): could be 'bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(512): or       'bool std::operator ==(std::nullptr_t,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(517): or       'bool std::operator ==(const std::exception_ptr &,std::nullptr_t)'
+          while trying to match the argument list '(std::string, std::string)'
+e:\database315\db315\db315\table.cpp(50): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(51): error C2678: binary '==' : no operator found which takes a left-hand operand of type 'std::string' (or there is no acceptable conversion)
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(507): could be 'bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(512): or       'bool std::operator ==(std::nullptr_t,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(517): or       'bool std::operator ==(const std::exception_ptr &,std::nullptr_t)'
+          while trying to match the argument list '(std::string, std::string)'
+e:\database315\db315\db315\table.cpp(55): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(56): error C2678: binary '!=' : no operator found which takes a left-hand operand of type 'std::string' (or there is no acceptable conversion)
+          could be 'built-in C++ operator!=(const char [1], const char [1])'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(522): or       'bool std::operator !=(const std::exception_ptr &,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(527): or       'bool std::operator !=(std::nullptr_t,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(532): or       'bool std::operator !=(const std::exception_ptr &,std::nullptr_t)'
+          while trying to match the argument list '(std::string, const char [1])'
+  Record.cpp
+  maintest.cpp
+e:\database315\db315\db315\maintest.cpp(8): fatal error C1083: Cannot open include file: 'boost/test/unit_test.hpp': No such file or directory
+  Database.cpp
+e:\database315\db315\db315\database.cpp(10): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\database.cpp(11): error C2678: binary '==' : no operator found which takes a left-hand operand of type 'std::string' (or there is no acceptable conversion)
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(507): could be 'bool std::operator ==(const std::exception_ptr &,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(512): or       'bool std::operator ==(std::nullptr_t,const std::exception_ptr &)'
+          c:\program files (x86)\microsoft visual studio 11.0\vc\include\exception(517): or       'bool std::operator ==(const std::exception_ptr &,std::nullptr_t)'
+          while trying to match the argument list '(std::string, std::string)'
+e:\database315\db315\db315\database.cpp(19): warning C4018: '<' : signed/unsigned mismatch
+  AttributeTypeTuple.cpp
+  Generating Code...
+Done Building Project "E:\database315\db315\db315\db315.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:05.59
