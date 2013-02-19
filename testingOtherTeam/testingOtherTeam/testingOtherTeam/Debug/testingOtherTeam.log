@@ -1,0 +1,32 @@
+﻿Build started 2/18/2013 6:37:29 PM.
+Project "E:\database315\testingOtherTeam\testingOtherTeam\testingOtherTeam\testingOtherTeam.vcxproj" on node 2 (Build target(s)).
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Testing.cpp
+  Testing.cpp
+e:\database315\testingotherteam\testingotherteam\testingotherteam\testing.cpp(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+e:\database315\testingotherteam\testingotherteam\testingotherteam\testing.cpp(8): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+e:\database315\testingotherteam\testingotherteam\testingotherteam\record.h(83): warning C4251: 'Record::vec' : class 'std::vector<_Ty>' needs to have dll-interface to be used by clients of class 'Record'
+          with
+          [
+              _Ty=std::string
+          ]
+e:\database315\testingotherteam\testingotherteam\testingotherteam\table.h(108): warning C4251: 'Table::attributes' : class 'std::vector<_Ty>' needs to have dll-interface to be used by clients of class 'Table'
+          with
+          [
+              _Ty=Table::Attribute
+          ]
+e:\database315\testingotherteam\testingotherteam\testingotherteam\table.h(109): warning C4251: 'Table::records' : class 'std::vector<_Ty>' needs to have dll-interface to be used by clients of class 'Table'
+          with
+          [
+              _Ty=Record
+          ]
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\database315\testingOtherTeam\testingOtherTeam\Debug\testingOtherTeam.exe" /INCREMENTAL /NOLOGO DBteam01.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\database315\testingOtherTeam\testingOtherTeam\Debug\testingOtherTeam.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\database315\testingOtherTeam\testingOtherTeam\Debug\testingOtherTeam.lib" /MACHINE:X86 Debug\Testing.obj
+  DBteam01.lib
+Testing.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: int __thiscall Database::numTables(void)" (__imp_?numTables@Database@@QAEHXZ) referenced in function "public: void __thiscall DATABASE_DROP_TABLE::test_method(void)" (?test_method@DATABASE_DROP_TABLE@@QAEXXZ)
+E:\database315\testingOtherTeam\testingOtherTeam\Debug\testingOtherTeam.exe : fatal error LNK1120: 1 unresolved externals
+Done Building Project "E:\database315\testingOtherTeam\testingOtherTeam\testingOtherTeam\testingOtherTeam.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:03.59

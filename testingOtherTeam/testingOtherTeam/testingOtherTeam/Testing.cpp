@@ -3,30 +3,22 @@
 /// @author Graham Leslie
 
 #define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
-// #include your database
+
 #include <string>;
 #include <vector>;
+#include "Database.h"
+#include <boost/test/unit_test.hpp>
 
 using namespace std;
-
-// date
-BOOST_AUTO_TEST_CASE(DATE)
-{
-	Date d = Date(1970,12,2);
-	BOOST_CHECK(d.year() == 1970);
-	BOOST_CHECK(d.month() == 12);
-	BOOST_CHECK(d.day() == 2);
-}
 
 // create table
 BOOST_AUTO_TEST_CASE(CREATE_TABLE)
 {
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	BOOST_REQUIRE(table.getSize() == 0);
 }
@@ -36,11 +28,11 @@ BOOST_AUTO_TEST_CASE(RENAME_ATTRIBUTE)
 {
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"numberOLD"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"numberOLD"));
 
-	table.renameAttribute(Attribute("number","numberOLD"));
+	table.renameAttribute("number","numberOLD");
 }
 
 // table remove attribute
@@ -48,11 +40,11 @@ BOOST_AUTO_TEST_CASE(REMOVE_ATTRIBUTE)
 {
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
-	table.removeAttribute("number");
+	table.removeAttribute(Table::Attribute(INT,"number"));
 }
 
 // record create
@@ -96,9 +88,9 @@ BOOST_AUTO_TEST_CASE(TABLE_ADD_RECORD)
 {
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	vector<string> values;
 	values.push_back("1342.50");
@@ -117,9 +109,9 @@ BOOST_AUTO_TEST_CASE(TABLE_ITERATOR)
 {
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	vector<string> values;
 	values.push_back("1342.50");
@@ -128,7 +120,7 @@ BOOST_AUTO_TEST_CASE(TABLE_ITERATOR)
 
 	Record record = Record(values);
 
-	BOOST_REQUIRE(table.begin()[0] == record);
+	BOOST_REQUIRE(table.begin()[0].getFloat(0) == record.getFloat(0));
 }
 
 // rountines on table
@@ -136,9 +128,9 @@ BOOST_AUTO_TEST_CASE(TABLE_ROUTINES)
 {
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	vector<string> values;
 	values.push_back("1342.50");
@@ -168,8 +160,8 @@ BOOST_AUTO_TEST_CASE(CROSS_JOIN)
 {
 	Table tableA = Table();
 
-	tableA.addAttribute(Attribute(FLOAT,"price"));
-	tableA.addAttribute(Attribute(STRING,"name"));
+	tableA.addAttribute(Table::Attribute(FLOAT,"price"));
+	tableA.addAttribute(Table::Attribute(STRING,"name"));
 
 	vector<string> values;
 	values.push_back("1342.50");
@@ -178,8 +170,8 @@ BOOST_AUTO_TEST_CASE(CROSS_JOIN)
 
 	Table tableB = Table();
 
-	tableB.addAttribute(Attribute(FLOAT,"price2"));
-	tableB.addAttribute(Attribute(STRING,"name2"));
+	tableB.addAttribute(Table::Attribute(FLOAT,"price2"));
+	tableB.addAttribute(Table::Attribute(STRING,"name2"));
 
 	values.clear();
 	values.push_back("1943.50");
@@ -217,13 +209,13 @@ BOOST_AUTO_TEST_CASE(DATABASE_ADD_RECORD)
 	
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	db.addTable("table",table);
 
-	BOOST_REQUIRE(db.getTables()[0] == "table");
+	BOOST_REQUIRE(db.listTables()[0].compare("table"));
 }
 
 // db drop
@@ -233,9 +225,9 @@ BOOST_AUTO_TEST_CASE(DATABASE_DROP_TABLE)
 	
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	db.addTable("table",table);
 	db.dropTable("table");
@@ -250,9 +242,9 @@ BOOST_AUTO_TEST_CASE(DATABASE_QUERY_STAR)
 	
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	vector<string> values;
 	values.push_back("1342.50");
@@ -281,15 +273,15 @@ BOOST_AUTO_TEST_CASE(DATABASE_QUERY_STAR)
 	BOOST_CHECK(result.begin()[0].getFloat(0) == (float)1943.5);
 }
 // db query nostar
-BOOST_AUTO_TEST_CASE(DATABASE_QUERY_STAR)
+BOOST_AUTO_TEST_CASE(DATABASE_DELQUERY_STAR_A)
 {
 	Database db = Database();
 	
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	vector<string> values;
 	values.push_back("1342.50");
@@ -319,15 +311,15 @@ BOOST_AUTO_TEST_CASE(DATABASE_QUERY_STAR)
 }
 
 // db deletequery
-BOOST_AUTO_TEST_CASE(DATABASE_QUERY_STAR)
+BOOST_AUTO_TEST_CASE(DATABASE_DELQUERY_STAR_B)
 {
 	Database db = Database();
 	
 	Table table = Table();
 
-	table.addAttribute(Attribute(FLOAT,"price"));
-	table.addAttribute(Attribute(STRING,"name"));
-	table.addAttribute(Attribute(INT,"number"));
+	table.addAttribute(Table::Attribute(FLOAT,"price"));
+	table.addAttribute(Table::Attribute(STRING,"name"));
+	table.addAttribute(Table::Attribute(INT,"number"));
 
 	vector<string> values;
 	values.push_back("1342.50");
