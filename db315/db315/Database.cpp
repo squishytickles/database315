@@ -78,4 +78,8 @@ Table query(string queryCmd) {
     
     // need to parse WHERE clause, using a stack and a mini lang evalulator like last year
     
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> zip file of 221 evaluator for figgrin out how to parse
