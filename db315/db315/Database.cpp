@@ -29,13 +29,20 @@ vector<Table> Database::getTables(){
 
 Table query(string queryCmd) {
 	// split the query into the three appropriate parts
-	int i = 0, locFROM = -1, locWHERE = -1;
+	int i = 0, loc SELECT = -1, locFROM = -1, locWHERE = -1;
 	while (i<queryCmd.length) {
+        if (queryCmd.substr(i,6).compare("SELECT") == 0 && locSELECT == 0)
+            locSELECT = i + 6;
 		if (queryCmd.substr(i,4).compare("FROM") == 0 && locFROM == 0) 
 			locFROM = i + 5;
-		if (queryCmd.substr(i,5).compare("WHERE") == 0 && locWHERE == 0) 
+		if (queryCmd.substr(i,5).compare("WHERE") == 0 && locWHERE == 0)
 			locWHERE = i + 6;
+        
+        i++;
 	}
+    
+    if (locWHERE = -1)
+        throw Database_exception("QUERY lacking a SELECT clause");
 
 	if (locFROM = -1)
 		throw Database_exception("QUERY lacking a FROM clause");
@@ -45,19 +52,30 @@ Table query(string queryCmd) {
 		locWHERE = queryCmd.length;
 
 	// contains all the tables to be selected from, or "*"
-	vector<string> tablesFROM;
+	vector<string> tablesSELECT;
 
 	string tableTemp = "";
-	for (i = locFROM; i < locWHERE - 6; i ++) {
+	for (i = locSELECT; i < locFROM - 6; i ++) {
 		if (queryCmd.substr(i,1).compare(",") != 0) {
 			// add a letter
 			tableTemp += queryCmd.substr(i,1);
 		} else {
 			// push it back and restart
-			tablesFROM.push_back(tableTemp);
+			tablesSELECT.push_back(tableTemp);
 			tableTemp = "";
 		}
 	}
 
-	// need to get the WHERE string and parse it
+	// need to get the table to select FROM
+    string tableFROM = "";
+    
+    for (i = locFROM; i < locWHERE; i ++) {
+        if (queryCmd.substr(i,1).compare(",") != 0)
+            break;
+        else
+            tableFROM += string(queryCmd.substr(i,1));
+    }
+    
+    // need to parse WHERE clause, using a stack and a mini lang evalulator like last year
+    
 }
