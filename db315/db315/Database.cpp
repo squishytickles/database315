@@ -51,18 +51,18 @@ Table query(string queryCmd) {
 	if (locWHERE = -1)
 		locWHERE = queryCmd.length;
 
-	// contains all the tables to be selected from, or "*"
-	vector<string> tablesSELECT;
+	// contains all the attributes to be selected from, or "*"
+	vector<string> attrsSELECT;
 
-	string tableTemp = "";
+	string attrTemp = "";
 	for (i = locSELECT; i < locFROM - 6; i ++) {
 		if (queryCmd.substr(i,1).compare(",") != 0) {
 			// add a letter
-			tableTemp += queryCmd.substr(i,1);
+			attrTemp += queryCmd.substr(i,1);
 		} else {
 			// push it back and restart
-			tablesSELECT.push_back(tableTemp);
-			tableTemp = "";
+			attrsSELECT.push_back(attrTemp);
+			attrTemp = "";
 		}
 	}
 
@@ -77,9 +77,91 @@ Table query(string queryCmd) {
     }
     
     // need to parse WHERE clause, using a stack and a mini lang evalulator like last year
-    
-<<<<<<< HEAD
+    //REMEBER TO INCLUDE <stack.h> IN MAIN!
+	vector<Table> tables = getTables();
+	Table table;
+	Record record;
+
+	stringstream ss;
+	string token;
+	string operand, operand1, operand2;
+	vector<string> tokens;
+	queue<string> output;
+	stack<string> operators;
+	stack<string> expression;
+	stack<string> operation;
+
+	// find the correct table that we'll be querying
+	for(int i = 0; i < tables.size(); i++)
+	{
+		if(tables[i].getName().compare(tableFROM))
+			table = getTables[i];
+	}
+
+	// convert the where clause into a list of tokens
+	string whereClause = queryCmd.substr(locWHERE, strlen(queryCmd));
+	ss << whereClause;
+	while(ss >> token) tokens.push_back(token);
+
+	// convert the list of tokens into a postfix expressinon
+	for(int i=0; i<tokens.size(); i++)
+	{
+		if(token[i].compare("("))
+	
+		else if(token[i].comapre(")"))
+		{
+			while(operators.top() != "(")
+			{
+				output.push(operators.pop());
+			}
+			operators.pop();
+		}
+		else if(token[i].compare("="))
+			operators.push(token[i]);
+		else if(token[i].compare(">"))
+			operators.push(token[i]);
+		else if(token[i].compare("<"))
+			operators.push(token[i]);
+		else if(token[i].compare("!="))
+			operators.push(token[i]);
+		else if(token[i].compare(">="))
+			operators.push(token[i]);
+		else if(token[i].compare("<="))
+			operators.push(token[i]);
+		else if(token[i].compare("&&"))
+			operators.push(token[i]);
+		else if(token[i].compare("||"))
+			operators.push(token[i]);
+		else if(token[i].compare("!"))
+			operators.push(token[i]);
+		else
+		{
+			token[i] = operand;
+			output.push(operand);
+		}
+
+		expression.push(output.pop());
+	}
+
+	//evaluate postfix expression
+	while(!expression.empty())
+	{
+		if(expression.top() = operand)
+			operation.push(operand);
+		else
+		{
+			operand2 = operation.top();
+			operation.pop();
+			operand1 = operation.top();
+			operation.pop();
+			
+			vector<AttributeTypeTuple> typeandvalue = table.getAttributes;
+
+			if(operation.top().compare("=")
+			{
+
+			}
+		}
+	}
+
 }
-=======
-}
->>>>>>> zip file of 221 evaluator for figgrin out how to parse
