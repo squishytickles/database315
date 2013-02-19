@@ -13,6 +13,7 @@
 #include <exception>
 #include <stdexcept>
 #include <sstream>
+#include <stack>
   
 /** MAIN CLASSES **/
 
