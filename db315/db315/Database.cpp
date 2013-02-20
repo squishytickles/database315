@@ -15,11 +15,11 @@ void Database::dropTable(string tableName){
 
 vector<string> Database::listTables(){
 	vector<string> names;
-	
+
 	for(int i=0; i<tables.size(); ++i){
 		names.push_back(tables[i].getName());
 	}
-	
+
 	return names;
 }
 
@@ -46,7 +46,7 @@ Table query(string queryCmd) {
 
 	if (locFROM = -1)
 		throw Database_exception("QUERY lacking a FROM clause");
-	
+
 	// no where clause, this is ok, let's just set it to the end of the query
 	if (locWHERE = -1)
 		locWHERE = queryCmd.length;
@@ -107,7 +107,7 @@ Table query(string queryCmd) {
 	for(int i=0; i<tokens.size(); i++)
 	{
 		if(token[i].compare("("))
-	
+
 		else if(token[i].comapre(")"))
 		{
 			while(operators.top() != "(")
@@ -150,18 +150,313 @@ Table query(string queryCmd) {
 			operation.push(operand);
 		else
 		{
-			operand2 = operation.top();
+			operand2 = operation.top();	// value
 			operation.pop();
-			operand1 = operation.top();
+			operand1 = operation.top(); // attribute
 			operation.pop();
+
+			vector<AttributeTypeTuple> attrsAndNames = table.getAttributes();
+			int typeVal;
+			int	index = -1; 
 			
-			vector<AttributeTypeTuple> typeandvalue = table.getAttributes;
-
-			if(operation.top().compare("=")
+			if((operand2 != "true") && (operation != "false")
+			{			
+				for(int i = 0; i < attrsAndNames.size(); i++)
+				{
+					if(attrsAndNames[i].getAttribute() == operand2)
+					{
+						typeVal = attrsAndNames[i].getTypeInt();
+						index = i;
+						break;
+					}
+				}
+			}
+			
+			if(index = -1)
+				throw Database_exception("Attribute type not found!");
+			
+			for(int i=0; i<table.getSize(); i++)
 			{
-
+				if(operation.top().compare("="))
+				{
+					switch(type)
+					{
+						case 0:
+						{
+							string val = getStringValue(index);
+							if(val.compare(operand1) == 0)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 1:
+						{
+							float val = getFloatValue(index);
+							if(val == operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 2:
+						{
+							int val = getIntValue(index);
+							if(val == operand1)
+								operation.push("true");
+							else
+								operation.push("false";
+							break;
+						}
+						case 3:
+						{
+							Date val = getDateValue(index);
+							if(val.compare(operand1) == 0)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+					}
+				}
+				
+				else if(operation.top().compare(">"))
+				{
+					switch(type)
+					{
+						case 0:
+						{
+							string val = getStringValue(index);
+							if(val.compare(operand1) > 0)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 1:
+						{
+							float val = getFloatValue(index);
+							if(val > operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 2:
+						{
+							int val = getIntValue(index);
+							if(val > operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 3:
+						{
+							Date val = getDateValue(index);
+							if(val.compare(operand1) > 0)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+					}
+				}
+				else if(operation.top().compare("<"))
+				{
+					switch(type)
+					{
+						case 0:
+						{
+							string val = getStringValue(index);
+							if(val.compare(operand1) < 0)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 1:
+						{
+							float val = getFloatValue(index);
+							if(val < operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 2:
+						{
+							int val = getIntValue(index);
+							if(val < operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 3:
+						{
+							Date val = getDateValue(index);
+							if(val.compare(operand1) < 0)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+					}
+				}
+				else if(operation.top().compare("!="))
+				{
+					switch(type)
+					{
+						case 0:
+						{
+							string val = getStringValue(index);
+							if(val.compare(operand1) != 0)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 1:
+						{
+							float val = getFloatValue(index);
+							if(val != operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 2:
+						{
+							int val = getIntValue(index);
+							if(val != operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 3:
+						{
+							Date val = getDateValue(index);
+							if(val.compare(operand1) != 0)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+					}
+				}
+				else if(operation.top().compare(">="))
+				{
+					switch(type)
+					{
+						case 0:
+						{
+							string val = getStringValue(index);
+							if((val.compare(operand1) > 0) || (val.compare(operand1) = 0))
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 1:
+						{
+							float val = getFloatValue(index);
+							if(val > operand1 || val == operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 2:
+						{
+							int val = getIntValue(index);
+							if(val > operand1 || val == operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 3:
+						{
+							Date val = getDateValue(index);
+							if((val.compare(operand1) > 0) || (val.compare(operand1) = 0))
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+					}
+				}
+				else if(operation.top().compare("<="))
+				{
+					switch(type)
+					{
+						case 0:
+						{
+							string val = getStringValue(index);
+							if((val.compare(operand1) < 0) || (val.compare(operand1) = 0))
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 1:
+						{
+							float val = getFloatValue(index);
+							if(val < operand1 || val == operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 2:
+						{
+							int val = getIntValue(index);
+							if(val < operand1 || val == operand1)
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+						case 3:
+						{
+							Date val = getDateValue(index);
+							if((val.compare(operand1) < 0) || (val.compare(operand1) = 0))
+								operation.push("true");
+							else
+								operation.push("false");
+							break;
+						}
+					}
+				}
+				else if(operation.top().compare("&&"))
+				{
+					string val = getStringValue(index);
+					if((val.compare("true") =0) && (operand.compare("true") = 0))
+						operation.push("true");
+					else
+						operation.push("false");		
+				}
+				else if(operation.top().compare("||"))
+				{
+					string val = getStringValue(index);
+					if((val.compare("true") = 0) || (operand.compare("true") = 0))
+						operation.push("true");
+					else
+						operation.push("false");		
+				}
+				else if(operation.top().compare("!"))
+				{
+					string val = getStringValue(index);
+					if(val.compare("true") = 0)
+						operation.push("false");
+					else
+						operation.push("true");		
+				}
+				else
+					throw Database_exception("Unknown operand (known operands include: =, !=, <, >, <=, >=, &&, ||, !)");
 			}
 		}
 	}
-
 }
