@@ -20,6 +20,7 @@
 class Record;
 class AttributeTypeTuple;
 class Table;
+class Date;
 
 
 
@@ -118,6 +119,22 @@ public:
 	void setAttribute(string newName);
 	string getType();
 };
+
+class Date
+{
+private:
+	// members
+	int month;
+	int day;
+	int year;
+
+public:
+	// constructor 
+	Date(int y, int m, int d): year(y), month(m), day(d) { }
+	
+	// functions
+	int compare(Date& other);
+	
 
 class TableIterator
 {
