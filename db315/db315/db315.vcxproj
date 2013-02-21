@@ -84,6 +84,7 @@
     <ClCompile Include="maintest.cpp" />
     <ClCompile Include="Record.cpp" />
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="TableIterator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Database.h" />

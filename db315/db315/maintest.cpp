@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(Table_Create_Test1)
 }
 
 BOOST_AUTO_TEST_CASE(Table_Insert){
-	Table testTable = Table();
+	Table testTable = Table::Table();
 	testTable.add(AttributeTypeTuple("joined", "date"));
 	vector<AttributeTypeTuple> attribs = testTable.getAttributes();
 	if(attribs.size() < 1)

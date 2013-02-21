@@ -1,9 +1,5 @@
 #include "Database.h"
 
-Table::~Table(){
-
-}
-
 string Table::getName(){
 	return name;
 }
@@ -152,6 +148,40 @@ float Table::max(string attribute) {
 
 	return max;
 
+}
+
+Table Table::crossJoin(Table& otherTable) {
+	// create table with half the attributes
+	Table crossed = Table(Table::getAttributes());
+	
+	// get the other tables attributes
+	vector <AttributeTypeTuple> otherATTs = otherTable.getAttributes();
+	vector <AttributeTypeTuple> myATTs = Table::getAttributes();
+	vector <AttributeTypeTuple> newATTs;
+
+	for(int i=0; i<otherATTs.size(); i++) {
+		for(int j=0; j<myATTs.size(); j++) {
+			if (otherATTs[i].compare(myATTs[i]) == 0) {
+				newATTs.push_back(myATTs[j]);
+			else
+			{
+				newATTs.push_back(myATTs[j]);
+				newATTs.push_back(otherATTs[i]);
+			}
+		}
+	}
+
+	// add all the other tables attributes
+	for (int i = 0; i < otherATTs.size(); i ++) {
+		crossed.add(otherATTs[i]);
+	}
+
+	// add the new records
+	for (int i = 0; i < otherTable.getSize(); i ++) {
+		crossed.insert(otherTable[i]);
+	}
+
+	return crossed;
 }
 
 Record Table::operator[](int i) const{

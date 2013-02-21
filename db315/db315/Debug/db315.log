@@ -1,23 +1,24 @@
-﻿Build started 2/21/2013 11:10:16 AM.
+﻿Build started 2/21/2013 12:18:24 PM.
 Project "E:\database315\db315\db315\db315.vcxproj" on node 2 (Rebuild target(s)).
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt AttributeTypeTuple.cpp Database.cpp Date.cpp maintest.cpp Record.cpp Table.cpp
+  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt AttributeTypeTuple.cpp Database.cpp Date.cpp maintest.cpp Record.cpp Table.cpp TableIterator.cpp
+  TableIterator.cpp
   Table.cpp
-e:\database315\db315\db315\table.cpp(21): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(41): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(51): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(59): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(76): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(84): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(91): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
-e:\database315\db315\db315\table.cpp(103): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(111): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(120): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-e:\database315\db315\db315\table.cpp(124): warning C4244: 'return' : conversion from 'int' to 'float', possible loss of data
-e:\database315\db315\db315\table.cpp(132): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(140): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\table.cpp(149): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-e:\database315\db315\db315\table.cpp(153): warning C4244: 'return' : conversion from 'int' to 'float', possible loss of data
+e:\database315\db315\db315\table.cpp(17): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(37): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(47): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(55): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(72): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(80): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(87): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
+e:\database315\db315\db315\table.cpp(99): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(107): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(116): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+e:\database315\db315\db315\table.cpp(120): warning C4244: 'return' : conversion from 'int' to 'float', possible loss of data
+e:\database315\db315\db315\table.cpp(128): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(136): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\table.cpp(145): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+e:\database315\db315\db315\table.cpp(149): warning C4244: 'return' : conversion from 'int' to 'float', possible loss of data
   Record.cpp
   maintest.cpp
 e:\database315\db315\db315\maintest.cpp(27): warning C4018: '<' : signed/unsigned mismatch
@@ -50,22 +51,11 @@ Link:
   Debug\maintest.obj
   Debug\Record.obj
   Debug\Table.obj
-Database.obj : error LNK2019: unresolved external symbol "public: __thiscall Table::Table(void)" (??0Table@@QAE@XZ) referenced in function "public: class Table __thiscall Database::query(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?query@Database@@QAE?AVTable@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
-maintest.obj : error LNK2001: unresolved external symbol "public: __thiscall Table::Table(void)" (??0Table@@QAE@XZ)
-Database.obj : error LNK2019: unresolved external symbol "public: __thiscall Record::Record(void)" (??0Record@@QAE@XZ) referenced in function "public: class Table __thiscall Database::query(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?query@Database@@QAE?AVTable@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
-maintest.obj : error LNK2001: unresolved external symbol "public: __thiscall Record::Record(void)" (??0Record@@QAE@XZ)
-maintest.obj : error LNK2019: unresolved external symbol "public: __thiscall Database::Database(void)" (??0Database@@QAE@XZ) referenced in function "public: void __thiscall Database_Add_Table::test_method(void)" (?test_method@Database_Add_Table@@QAEXXZ)
-maintest.obj : error LNK2019: unresolved external symbol "public: __thiscall Database::~Database(void)" (??1Database@@QAE@XZ) referenced in function "public: void __thiscall Database_Add_Table::test_method(void)" (?test_method@Database_Add_Table@@QAEXXZ)
+  Debug\TableIterator.obj
 maintest.obj : error LNK2019: unresolved external symbol "public: class Table __thiscall Table::crossJoin(class Table &)" (?crossJoin@Table@@QAE?AV1@AAV1@@Z) referenced in function "public: void __thiscall Table_Cross_Join::test_method(void)" (?test_method@Table_Cross_Join@@QAEXXZ)
-maintest.obj : error LNK2019: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Record::getValue(int)" (?getValue@Record@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@Z) referenced in function "public: void __thiscall Record_Create::test_method(void)" (?test_method@Record_Create@@QAEXXZ)
-Table.obj : error LNK2001: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Record::getValue(int)" (?getValue@Record@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@Z)
-maintest.obj : error LNK2019: unresolved external symbol "public: __thiscall TableIterator::TableIterator(class Table)" (??0TableIterator@@QAE@VTable@@@Z) referenced in function "public: void __thiscall TableIterator_Create::test_method(void)" (?test_method@TableIterator_Create@@QAEXXZ)
-maintest.obj : error LNK2019: unresolved external symbol "public: __thiscall TableIterator::~TableIterator(void)" (??1TableIterator@@QAE@XZ) referenced in function "public: void __thiscall TableIterator_Create::test_method(void)" (?test_method@TableIterator_Create@@QAEXXZ)
-maintest.obj : error LNK2019: unresolved external symbol "public: void __thiscall TableIterator::next(void)" (?next@TableIterator@@QAEXXZ) referenced in function "public: void __thiscall TableIterator_Create::test_method(void)" (?test_method@TableIterator_Create@@QAEXXZ)
-maintest.obj : error LNK2019: unresolved external symbol "public: class Record __thiscall TableIterator::get(void)" (?get@TableIterator@@QAE?AVRecord@@XZ) referenced in function "public: void __thiscall TableIterator_Create::test_method(void)" (?test_method@TableIterator_Create@@QAEXXZ)
-E:\database315\db315\Debug\db315.exe : fatal error LNK1120: 10 unresolved externals
+E:\database315\db315\Debug\db315.exe : fatal error LNK1120: 1 unresolved externals
 Done Building Project "E:\database315\db315\db315\db315.vcxproj" (Rebuild target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:08.65
+Time Elapsed 00:00:09.92

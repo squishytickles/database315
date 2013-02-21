@@ -5,10 +5,6 @@ Record::Record(vector<string> value){
 	values = value;
 }
 
-Record::~Record(){
-	
-}
-
 void Record::addValue(string t){
 	values.push_back(t);
 }
@@ -24,7 +20,12 @@ void Record::removeValue(int i){
 	2: "int"
 	3: "date"
 */
-	
+
+// get a raw value
+string Record::getValue(int i) {
+	return values[i];
+}
+
 string Record::getStringValue(int i) {
 	return values[i];
 }

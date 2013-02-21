@@ -28,3 +28,10 @@ int AttributeTypeTuple::getTypeInt(){
 	// throw an exception if there is an invalid type stored
 	throw Database_exception("Unknown type stored in AttributeTypeTuple!");
 }
+
+int AttributeTypeTuple::compare(AttributeTypeTuple& other) {
+	if (AttributeTypeTuple::getAttribute() == other.getAttribute() && AttributeTypeTuple::getType() == other.getType())
+		return 0;
+	else
+		return -1;
+}

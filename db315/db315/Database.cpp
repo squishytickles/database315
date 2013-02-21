@@ -114,12 +114,8 @@ Table Database::query(string queryCmd) {
 		{
 			while(operators.top() != "(")
 			{
-<<<<<<< HEAD
-				output.enqueue(operators.pop());
-=======
 				output.push(operators.top());
 				operators.pop();
->>>>>>> bug fixes
 			}
 			operators.pop();
 		}
@@ -143,20 +139,12 @@ Table Database::query(string queryCmd) {
 			operators.push(tokens[i]);
 		else
 		{
-<<<<<<< HEAD
-			token[i] = operand;
-			output.enqueue(operand);
-		}
-
-		expression.push(output.dequeue());
-=======
 			tokens[i] = operand;
 			output.push(operand);
 		}
 
 		expression.push(output.front());
 		output.pop();
->>>>>>> bug fixes
 	}
 
 	//evaluate postfix expression

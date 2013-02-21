@@ -35,8 +35,8 @@ private:
 
 public:
 	// constructor
-	Database();
-	~Database();
+	Database() { }
+	~Database() { }
 
 	// functions
 	void addTable(Table table, string tableName);
@@ -60,9 +60,9 @@ private:
 
 public:
 	// constructor
-	Table();
+	Table() { }
 	Table(vector<AttributeTypeTuple> aTTs): attributesAndTypes(aTTs) { }
-	~Table();
+	~Table() { }
 
 	// functions
 	string getName();
@@ -92,9 +92,9 @@ private:
 
 public:
 	// constructor
-	Record();
+	Record() { }
 	Record(vector<string> value);
-	~Record();
+	~Record() { }
 
 	// functions
 	void addValue(string t);
@@ -120,13 +120,14 @@ private:
 public:
 	// constructor
 	AttributeTypeTuple(string a, string t): attribute(a), type(t) { }
-	//~AttributeTypeTuple();
+	~AttributeTypeTuple() { }
 
 	// functions
 	string getAttribute();
 	void setAttribute(string newName);
 	string getType();
 	int getTypeInt();
+	int AttributeTypeTuple::compare(AttributeTypeTuple& other);
 };
 
 class Date
@@ -140,6 +141,7 @@ private:
 public:
 	// constructor 
 	Date(int y, int m, int d): year(y), month(m), day(d) { }
+	~Date() { }
 	
 	// functions
 	int compare(Date& other);
@@ -153,11 +155,13 @@ class TableIterator
 {
 private:
 	// members
+	Table table;
+	int i;
 
 public:
 	// constructor
-	TableIterator(Table t);						// places iterator on first record
-	~TableIterator();
+	TableIterator(Table t): table(t), i(0) { }						// places iterator on first record
+	~TableIterator() { }
 
 	// functions
 	void next();								// moves to next record
