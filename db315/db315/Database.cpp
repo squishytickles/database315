@@ -112,7 +112,7 @@ Table query(string queryCmd) {
 		{
 			while(operators.top() != "(")
 			{
-				output.push(operators.pop());
+				output.enqueue(operators.pop());
 			}
 			operators.pop();
 		}
@@ -137,10 +137,10 @@ Table query(string queryCmd) {
 		else
 		{
 			token[i] = operand;
-			output.push(operand);
+			output.enqueue(operand);
 		}
 
-		expression.push(output.pop());
+		expression.push(output.dequeue());
 	}
 
 	//evaluate postfix expression
