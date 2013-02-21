@@ -1,5 +1,7 @@
 #include "Database.h"
 
+using namespace std;
+
 
 void Database::addTable(Table table, string tableName){
 	table.setName(tableName);
@@ -27,10 +29,10 @@ vector<Table> Database::getTables(){
 	return tables;
 }
 
-Table query(string queryCmd) {
+Table Database::query(string queryCmd) {
 	// split the query into the three appropriate parts
-	int i = 0, loc SELECT = -1, locFROM = -1, locWHERE = -1;
-	while (i<queryCmd.length) {
+	int i = 0, locSELECT = -1, locFROM = -1, locWHERE = -1;
+	while (i < queryCmd.length()) {
         if (queryCmd.substr(i,6).compare("SELECT") == 0 && locSELECT == 0)
             locSELECT = i + 6;
 		if (queryCmd.substr(i,4).compare("FROM") == 0 && locFROM == 0) 
@@ -41,15 +43,15 @@ Table query(string queryCmd) {
         i++;
 	}
     
-    if (locWHERE = -1)
+    if (locWHERE == -1)
         throw Database_exception("QUERY lacking a SELECT clause");
 
-	if (locFROM = -1)
+	if (locFROM == -1)
 		throw Database_exception("QUERY lacking a FROM clause");
 
 	// no where clause, this is ok, let's just set it to the end of the query
-	if (locWHERE = -1)
-		locWHERE = queryCmd.length;
+	if (locWHERE == -1)
+		locWHERE = queryCmd.length();
 
 	// contains all the attributes to be selected from, or "*"
 	vector<string> attrsSELECT;
@@ -79,8 +81,8 @@ Table query(string queryCmd) {
     // need to parse WHERE clause, using a stack and a mini lang evalulator like last year
     //REMEBER TO INCLUDE <stack.h> IN MAIN!
 	vector<Table> tables = getTables();
-	Table table;
-	Record record;
+	Table table = Table();
+	Record record = Record();
 
 	stringstream ss;
 	string token;
@@ -95,58 +97,72 @@ Table query(string queryCmd) {
 	for(int i = 0; i < tables.size(); i++)
 	{
 		if(tables[i].getName().compare(tableFROM))
-			table = getTables[i];
+			table = getTables()[i];
 	}
 
 	// convert the where clause into a list of tokens
-	string whereClause = queryCmd.substr(locWHERE, strlen(queryCmd));
+	string whereClause = queryCmd.substr(locWHERE, queryCmd.length());
 	ss << whereClause;
 	while(ss >> token) tokens.push_back(token);
 
 	// convert the list of tokens into a postfix expressinon
 	for(int i=0; i<tokens.size(); i++)
 	{
-		if(token[i].compare("("))
-
-		else if(token[i].comapre(")"))
+		if(tokens[i].compare("("))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare(")"))
 		{
 			while(operators.top() != "(")
 			{
+<<<<<<< HEAD
 				output.enqueue(operators.pop());
+=======
+				output.push(operators.top());
+				operators.pop();
+>>>>>>> bug fixes
 			}
 			operators.pop();
 		}
-		else if(token[i].compare("="))
-			operators.push(token[i]);
-		else if(token[i].compare(">"))
-			operators.push(token[i]);
-		else if(token[i].compare("<"))
-			operators.push(token[i]);
-		else if(token[i].compare("!="))
-			operators.push(token[i]);
-		else if(token[i].compare(">="))
-			operators.push(token[i]);
-		else if(token[i].compare("<="))
-			operators.push(token[i]);
-		else if(token[i].compare("&&"))
-			operators.push(token[i]);
-		else if(token[i].compare("||"))
-			operators.push(token[i]);
-		else if(token[i].compare("!"))
-			operators.push(token[i]);
+		else if(tokens[i].compare("="))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare(">"))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare("<"))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare("!="))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare(">="))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare("<="))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare("&&"))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare("||"))
+			operators.push(tokens[i]);
+		else if(tokens[i].compare("!"))
+			operators.push(tokens[i]);
 		else
 		{
+<<<<<<< HEAD
 			token[i] = operand;
 			output.enqueue(operand);
 		}
 
 		expression.push(output.dequeue());
+=======
+			tokens[i] = operand;
+			output.push(operand);
+		}
+
+		expression.push(output.front());
+		output.pop();
+>>>>>>> bug fixes
 	}
 
 	//evaluate postfix expression
 	while(!expression.empty())
 	{
-		if(expression.top() = operand)
+		if(expression.top() == operand)
 			operation.push(operand);
 		else
 		{
@@ -159,7 +175,7 @@ Table query(string queryCmd) {
 			int typeVal;
 			int	index = -1; 
 			
-			if((operand2 != "true") && (operation != "false")
+			if((operand2 != "true") && (operation.top() != "false"))
 			{			
 				for(int i = 0; i < attrsAndNames.size(); i++)
 				{
@@ -179,96 +195,96 @@ Table query(string queryCmd) {
 			{
 				if(operation.top().compare("="))
 				{
-					switch(type)
+					switch(typeVal)
 					{
 						case 0:
 						{
-							string val = getStringValue(index);
+							string val = record.getStringValue(index);
 							if(val.compare(operand1) == 0)
 								operation.push("true");
 							else
 								operation.push("false");
-							break;
 						}
+						break;
 						case 1:
 						{
-							float val = getFloatValue(index);
-							if(val == operand1)
+							float val = record.getFloatValue(index);
+							if(val == stringToFloat(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
-							break;
 						}
+						break;
 						case 2:
 						{
-							int val = getIntValue(index);
-							if(val == operand1)
-								operation.push("true");
-							else
-								operation.push("false";
-							break;
-						}
-						case 3:
-						{
-							Date val = getDateValue(index);
-							if(val.compare(operand1) == 0)
+							int val = record.getIntValue(index);
+							if(val == stringToInt(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
-							break;
 						}
+						break;
+						case 3:
+						{
+							Date val = record.getDateValue(index);
+							if(val.compare(stringToDate(operand1)) == 0)
+								operation.push("true");
+							else
+								operation.push("false");
+						}
+						break;
 					}
 				}
 				
 				else if(operation.top().compare(">"))
 				{
-					switch(type)
+					switch(typeVal)
 					{
 						case 0:
 						{
-							string val = getStringValue(index);
+							string val = record.getStringValue(index);
 							if(val.compare(operand1) > 0)
 								operation.push("true");
 							else
 								operation.push("false");
-							break;
 						}
+						break;
 						case 1:
 						{
-							float val = getFloatValue(index);
-							if(val > operand1)
+							float val = record.getFloatValue(index);
+							if(val > stringToFloat(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
-							break;
 						}
+						break;
 						case 2:
 						{
-							int val = getIntValue(index);
-							if(val > operand1)
+							int val = record.getIntValue(index);
+							if(val > stringToInt(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
-							break;
 						}
+						break;
 						case 3:
 						{
-							Date val = getDateValue(index);
-							if(val.compare(operand1) > 0)
+							Date val = record.getDateValue(index);
+							if(val.compare(stringToDate(operand1)) > 0)
 								operation.push("true");
 							else
 								operation.push("false");
-							break;
 						}
+						break;
 					}
 				}
 				else if(operation.top().compare("<"))
 				{
-					switch(type)
+					switch(typeVal)
 					{
 						case 0:
 						{
-							string val = getStringValue(index);
+							string val = record.getStringValue(index);
 							if(val.compare(operand1) < 0)
 								operation.push("true");
 							else
@@ -277,8 +293,8 @@ Table query(string queryCmd) {
 						}
 						case 1:
 						{
-							float val = getFloatValue(index);
-							if(val < operand1)
+							float val = record.getFloatValue(index);
+							if(val < stringToFloat(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -286,8 +302,8 @@ Table query(string queryCmd) {
 						}
 						case 2:
 						{
-							int val = getIntValue(index);
-							if(val < operand1)
+							int val = record.getIntValue(index);
+							if(val < stringToInt(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -295,8 +311,8 @@ Table query(string queryCmd) {
 						}
 						case 3:
 						{
-							Date val = getDateValue(index);
-							if(val.compare(operand1) < 0)
+							Date val = record.getDateValue(index);
+							if(val.compare(stringToDate(operand1)) < 0)
 								operation.push("true");
 							else
 								operation.push("false");
@@ -306,11 +322,11 @@ Table query(string queryCmd) {
 				}
 				else if(operation.top().compare("!="))
 				{
-					switch(type)
+					switch(typeVal)
 					{
 						case 0:
 						{
-							string val = getStringValue(index);
+							string val = record.getStringValue(index);
 							if(val.compare(operand1) != 0)
 								operation.push("true");
 							else
@@ -319,8 +335,8 @@ Table query(string queryCmd) {
 						}
 						case 1:
 						{
-							float val = getFloatValue(index);
-							if(val != operand1)
+							float val = record.getFloatValue(index);
+							if(val != stringToFloat(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -328,8 +344,8 @@ Table query(string queryCmd) {
 						}
 						case 2:
 						{
-							int val = getIntValue(index);
-							if(val != operand1)
+							int val = record.getIntValue(index);
+							if(val != stringToInt(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -337,8 +353,8 @@ Table query(string queryCmd) {
 						}
 						case 3:
 						{
-							Date val = getDateValue(index);
-							if(val.compare(operand1) != 0)
+							Date val = record.getDateValue(index);
+							if(val.compare(stringToDate(operand1)) != 0)
 								operation.push("true");
 							else
 								operation.push("false");
@@ -348,12 +364,12 @@ Table query(string queryCmd) {
 				}
 				else if(operation.top().compare(">="))
 				{
-					switch(type)
+					switch(typeVal)
 					{
 						case 0:
 						{
-							string val = getStringValue(index);
-							if((val.compare(operand1) > 0) || (val.compare(operand1) = 0))
+							string val = record.getStringValue(index);
+							if((val.compare(operand1) > 0) || (val.compare(operand1) == 0))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -361,8 +377,8 @@ Table query(string queryCmd) {
 						}
 						case 1:
 						{
-							float val = getFloatValue(index);
-							if(val > operand1 || val == operand1)
+							float val = record.getFloatValue(index);
+							if(val > stringToFloat(operand1) || val == stringToFloat(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -370,8 +386,8 @@ Table query(string queryCmd) {
 						}
 						case 2:
 						{
-							int val = getIntValue(index);
-							if(val > operand1 || val == operand1)
+							int val = record.getIntValue(index);
+							if(val > stringToInt(operand1) || val == stringToInt(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -379,8 +395,8 @@ Table query(string queryCmd) {
 						}
 						case 3:
 						{
-							Date val = getDateValue(index);
-							if((val.compare(operand1) > 0) || (val.compare(operand1) = 0))
+							Date val = record.getDateValue(index);
+							if((val.compare(stringToDate(operand1)) > 0) || (val.compare(stringToDate(operand1)) == 0))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -390,12 +406,12 @@ Table query(string queryCmd) {
 				}
 				else if(operation.top().compare("<="))
 				{
-					switch(type)
+					switch(typeVal)
 					{
 						case 0:
 						{
-							string val = getStringValue(index);
-							if((val.compare(operand1) < 0) || (val.compare(operand1) = 0))
+							string val = record.getStringValue(index);
+							if((val.compare(operand1) < 0) || (val.compare(operand1) == 0))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -403,8 +419,8 @@ Table query(string queryCmd) {
 						}
 						case 1:
 						{
-							float val = getFloatValue(index);
-							if(val < operand1 || val == operand1)
+							float val = record.getFloatValue(index);
+							if(val < stringToFloat(operand1) || val == stringToFloat(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -412,8 +428,8 @@ Table query(string queryCmd) {
 						}
 						case 2:
 						{
-							int val = getIntValue(index);
-							if(val < operand1 || val == operand1)
+							int val = record.getIntValue(index);
+							if(val < stringToInt(operand1) || val == stringToInt(operand1))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -421,8 +437,8 @@ Table query(string queryCmd) {
 						}
 						case 3:
 						{
-							Date val = getDateValue(index);
-							if((val.compare(operand1) < 0) || (val.compare(operand1) = 0))
+							Date val = record.getDateValue(index);
+							if((val.compare(stringToDate(operand1)) < 0) || (val.compare(stringToDate(operand1)) == 0))
 								operation.push("true");
 							else
 								operation.push("false");
@@ -432,24 +448,24 @@ Table query(string queryCmd) {
 				}
 				else if(operation.top().compare("&&"))
 				{
-					string val = getStringValue(index);
-					if((val.compare("true") =0) && (operand.compare("true") = 0))
+					string val = record.getStringValue(index);
+					if((val.compare("true") == 0) && (operand.compare("true") == 0))
 						operation.push("true");
 					else
 						operation.push("false");		
 				}
 				else if(operation.top().compare("||"))
 				{
-					string val = getStringValue(index);
-					if((val.compare("true") = 0) || (operand.compare("true") = 0))
+					string val = record.getStringValue(index);
+					if((val.compare("true") == 0) || (operand.compare("true") == 0))
 						operation.push("true");
 					else
 						operation.push("false");		
 				}
 				else if(operation.top().compare("!"))
 				{
-					string val = getStringValue(index);
-					if(val.compare("true") = 0)
+					string val = record.getStringValue(index);
+					if(val.compare("true") == 0)
 						operation.push("false");
 					else
 						operation.push("true");		
@@ -460,3 +476,35 @@ Table query(string queryCmd) {
 		}
 	}
 }
+
+float Database::stringToFloat(string type)
+{
+	float floatVal;
+	stringstream ss;
+	ss << type;
+	ss >> floatVal;
+	return floatVal;
+}
+
+int Database::stringToInt(string type)
+{
+	int intVal;
+	stringstream ss;
+	ss << type;
+	ss >> intVal;
+	return intVal;
+}
+
+Date Database::stringToDate(string type)
+{
+	int m, d, y;
+	stringstream ss;
+	ss << type;
+	ss >> d >> m >> y;
+	return Date(y,m,d);
+}
+
+
+
+
+

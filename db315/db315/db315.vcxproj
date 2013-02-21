@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClCompile Include="AttributeTypeTuple.cpp" />
     <ClCompile Include="Database.cpp" />
+    <ClCompile Include="Date.cpp" />
     <ClCompile Include="maintest.cpp" />
     <ClCompile Include="Record.cpp" />
     <ClCompile Include="Table.cpp" />

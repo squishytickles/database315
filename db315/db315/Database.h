@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <stack>
+#include <queue>
   
 /** MAIN CLASSES **/
 
@@ -43,7 +44,10 @@ public:
 	vector<string> listTables();						// returns names of tables
 	vector<Table> getTables();						// returns actual tables
 	Table query(string queryCmd);
-	void deleteQuery(string querycmd);					// opposite of query()
+	void deleteQuery(string querycmd);				// opposite of query()
+	float stringToFloat(string type);
+	int stringToInt(string type);
+	Date stringToDate(string type);
 };
 
 class Table
@@ -95,6 +99,10 @@ public:
 	// functions
 	void addValue(string t);
 	void removeValue(int i);
+	string getStringValue(int i);
+	float getFloatValue(int i);
+	int getIntValue(int i);
+	Date getDateValue(int i);
 	string getValue(int i);
 	string operator[](int i) const;		// iterate through values
     string & operator[](int i);			// iterate through values
@@ -118,6 +126,7 @@ public:
 	string getAttribute();
 	void setAttribute(string newName);
 	string getType();
+	int getTypeInt();
 };
 
 class Date
@@ -134,6 +143,10 @@ public:
 	
 	// functions
 	int compare(Date& other);
+	int getYear();
+	int getMonth();
+	int getDay();
+};
 	
 
 class TableIterator

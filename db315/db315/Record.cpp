@@ -17,10 +17,6 @@ void Record::removeValue(int i){
 	values.erase(values.begin()+i);
 }
 
-string Record::getRawValue(int i){
-	return values[i];
-}
-
 /* 	
 	getting values:
 	0: "string"
@@ -35,7 +31,7 @@ string Record::getStringValue(int i) {
 
 float Record::getFloatValue(int i) {
 	stringstream ss;
-	ss << record[i];
+	ss << values[i];
 	float f;
 	ss >> f;
 	return f;
@@ -43,7 +39,7 @@ float Record::getFloatValue(int i) {
 
 int Record::getIntValue(int i) {
 	stringstream ss;
-	ss << record[i];
+	ss << values[i];
 	int iv;
 	ss >> iv;
 	return iv;
@@ -51,7 +47,7 @@ int Record::getIntValue(int i) {
 
 Date Record::getDateValue(int i) {
 	stringstream ss;
-	string date = record[i];
+	string date = values[i];
 	replace(date.begin(), date.end(), '/', ' ');
 	ss << date;
 	int m, d, y;
