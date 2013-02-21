@@ -72,13 +72,13 @@ BOOST_AUTO_TEST_CASE(Table_Insert_into){
 	for(int i=0;i<testTable.getSize();i++){
 		Record test = testTable[i];
 		if(test.getValue(0).compare("1") != 0)
-			BOOST_ERROR("Invalid Record found in table");
+			BOOST_ERROR("1-Invalid Record found in table");
 		else if(test.getValue(1).compare("James") != 0)
-			BOOST_ERROR("Invalid Record found in table");
-		else if(test.getValue(1).compare("Smith") != 0)
-			BOOST_ERROR("Invalid Record found in table");
-		else if(test.getValue(1).compare("01/11/2012") != 0)
-			BOOST_ERROR("Invalid Record found in table");
+			BOOST_ERROR("2-Invalid Record found in table");
+		else if(test.getValue(2).compare("Smith") != 0)
+			BOOST_ERROR("3-Invalid Record found in table");
+		else if(test.getValue(3).compare("01/11/2012") != 0)
+			BOOST_ERROR("4-Invalid Record found in table");
 	}
 }
 

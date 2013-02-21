@@ -35,7 +35,7 @@ int Table::getSize(){
 
 void Table::rename(string originalName, string newName){
 	for(int i=0; i<attributesAndTypes.size(); ++i){
-		if(attributesAndTypes[i].getAttribute().compare(originalName))
+		if(attributesAndTypes[i].getAttribute().compare(originalName) == 0)
 			attributesAndTypes[i].setAttribute(newName);
 	}
 }
@@ -45,21 +45,19 @@ float Table::sum(string attribute) {
 	float sum = 0;
 
 	for (i = 0; i < attributesAndTypes.size(); i ++) {
-		if (attributesAndTypes[i].getAttribute().compare(attribute) == 0)
-			valueAt = -1;
+		if (attributesAndTypes[i].getAttribute().compare(attribute) == 0) {
+			valueAt = i;
+			break;
+		}
 	}
 
 	if (valueAt == -1)
 		throw Database_exception("Could not find attribute to sum!");
 
 	for (i = 0; i < records.size(); i ++) {
-		stringstream ss;
-		float toSum;
 
 		if (records[i].getValue(valueAt).compare("") != 0) {
-			ss << records[i].getValue(valueAt);
-			ss >> toSum;
-			sum += toSum;
+			sum += records[i].getFloatValue(valueAt);
 		}
 	}
 	return sum;
@@ -70,8 +68,10 @@ int Table::count(string attribute) {
 	int sum = 0;
 
 	for (i = 0; i < attributesAndTypes.size(); i ++) {
-		if (attributesAndTypes[i].getAttribute().compare(attribute) == 0)
-			valueAt = -1;
+		if (attributesAndTypes[i].getAttribute().compare(attribute) == 0) {
+			valueAt = i;
+			break;
+		}
 	}
 
 	if (valueAt == -1)
@@ -97,23 +97,28 @@ float Table::min(string attribute) {
 	int min = 0;
 
 	for (i = 0; i < attributesAndTypes.size(); i ++) {
-		if (attributesAndTypes[i].getAttribute().compare(attribute) == 0)
-			valueAt = -1;
+		if (attributesAndTypes[i].getAttribute().compare(attribute) == 0) {
+			valueAt = i;
+			break;
+		}
 	}
 
 	if (valueAt == -1)
 		throw Database_exception("Could not find attribute to min!");
 
+	// get first non-null initial min
+	for (int j = 0; j < records.size(); j ++) {
+		if (records[j].getFloatValue(valueAt) != 0) {
+			min = records[j].getFloatValue(valueAt);
+			break;
+		}
+	}
+
+	// get the min
 	for (i = 0; i < records.size(); i ++) {
-		stringstream ss;
-		float toMin;
-
-		if (records[i].getValue(valueAt).compare("") != 0) {
-			ss << records[i].getValue(valueAt);
-			ss >> toMin;
-
-			if (toMin < min)
-				min = toMin;
+		if (records[i].getFloatValue(valueAt) != 0) {
+			if (records[i].getFloatValue(valueAt) < min)
+				min = records[i].getFloatValue(valueAt);
 		}
 	}
 
@@ -126,23 +131,28 @@ float Table::max(string attribute) {
 	int max = 0;
 
 	for (i = 0; i < attributesAndTypes.size(); i ++) {
-		if (attributesAndTypes[i].getAttribute().compare(attribute) == 0)
-			valueAt = -1;
+		if (attributesAndTypes[i].getAttribute().compare(attribute) == 0) {
+			valueAt = i;
+			break;
+		}
 	}
 
 	if (valueAt == -1)
-		throw Database_exception("Could not find attribute to max!");
+		throw Database_exception("Could not find attribute to min!");
 
+	// get first non-null initial max
+	for (int j = 0; j < records.size(); j ++) {
+		if (records[j].getFloatValue(valueAt) != 0) {
+			max = records[j].getFloatValue(valueAt);
+			break;
+		}
+	}
+
+	// get the max
 	for (i = 0; i < records.size(); i ++) {
-		stringstream ss;
-		float toMax;
-
-		if (records[i].getValue(valueAt).compare("") != 0) {
-			ss << records[i].getValue(valueAt);
-			ss >> toMax;
-
-			if (toMax > max)
-				max = toMax;
+		if (records[i].getFloatValue(valueAt) != 0) {
+			if (records[i].getFloatValue(valueAt) > max)
+				max = records[i].getFloatValue(valueAt);
 		}
 	}
 
@@ -151,35 +161,42 @@ float Table::max(string attribute) {
 }
 
 Table Table::crossJoin(Table& otherTable) {
-	// create table with half the attributes
-	Table crossed = Table(Table::getAttributes());
-	
 	// get the other tables attributes
-	vector <AttributeTypeTuple> otherATTs = otherTable.getAttributes();
-	vector <AttributeTypeTuple> myATTs = Table::getAttributes();
-	vector <AttributeTypeTuple> newATTs;
+	vector<AttributeTypeTuple> otherATTs = otherTable.getAttributes();
+	vector<AttributeTypeTuple> myATTs = Table::getAttributes();
+	vector<AttributeTypeTuple> newATTs;
+	vector<Record> newRecords;
 
-	for(int i=0; i<otherATTs.size(); i++) {
-		for(int j=0; j<myATTs.size(); j++) {
-			if (otherATTs[i].compare(myATTs[i]) == 0) {
+	// create a list of aTTs for the new table, philter out diplicates
+	for (int i=0; i<otherATTs.size(); i++) {
+		for (int j=0; j<myATTs.size(); j++) {
+			if (newATTs[j].compare(otherATTs[i]) == 0) {
 				newATTs.push_back(myATTs[j]);
-			else
-			{
-				newATTs.push_back(myATTs[j]);
-				newATTs.push_back(otherATTs[i]);
+
+				Record newRecord = Record();
+				for (int k = 0; k < Table::getSize(); k ++) {
+					newRecord.addValue(Table::records[j].getValue(j));
+				}
+
+				newRecords.push_back(newRecord);
 			}
 		}
+		newATTs.push_back(otherATTs[i]);
+
+		Record newRecord = Record();
+		for (int k = 0; k < otherTable.getSize(); k ++) {
+			newRecord.addValue(otherTable[k].getValue(i));
+		}
+
+		newRecords.push_back(newRecord);
 	}
 
-	// add all the other tables attributes
-	for (int i = 0; i < otherATTs.size(); i ++) {
-		crossed.add(otherATTs[i]);
-	}
+	// create table with the new attributes
+	Table crossed = Table(newATTs);
 
-	// add the new records
-	for (int i = 0; i < otherTable.getSize(); i ++) {
-		crossed.insert(otherTable[i]);
-	}
+	// add my table's records
+	for (int i = 0; i < newRecords.size(); i ++)
+		crossed.insert(newRecords[i]);
 
 	return crossed;
 }

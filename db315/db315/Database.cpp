@@ -29,440 +29,95 @@ vector<Table> Database::getTables(){
 	return tables;
 }
 
-Table Database::query(string queryCmd) {
-	// split the query into the three appropriate parts
-	int i = 0, locSELECT = -1, locFROM = -1, locWHERE = -1;
-	while (i < queryCmd.length()) {
-        if (queryCmd.substr(i,6).compare("SELECT") == 0 && locSELECT == 0)
-            locSELECT = i + 6;
-		if (queryCmd.substr(i,4).compare("FROM") == 0 && locFROM == 0) 
-			locFROM = i + 5;
-		if (queryCmd.substr(i,5).compare("WHERE") == 0 && locWHERE == 0)
-			locWHERE = i + 6;
-        
-        i++;
-	}
-    
-    if (locWHERE == -1)
-        throw Database_exception("QUERY lacking a SELECT clause");
+vector<string> getOps() {
+	vector<string> ops;
+	ops.push_back("=");
+	ops.push_back(">");
+	ops.push_back("<");
+	ops.push_back("!=");
+	ops.push_back(">=");
+	ops.push_back("<=");
+	ops.push_back("&&");
+	ops.push_back("||");
+	ops.push_back("!");
+	return ops;
+}
 
-	if (locFROM == -1)
-		throw Database_exception("QUERY lacking a FROM clause");
+void trimWS(string& str) {
+	stringstream ss;
+	ss << str;
+	str.clear();
+	ss >> str;
+}
 
-	// no where clause, this is ok, let's just set it to the end of the query
-	if (locWHERE == -1)
-		locWHERE = queryCmd.length();
+bool isOp(string token) {
+	vector<string> ops = getOps();
 
-	// contains all the attributes to be selected from, or "*"
-	vector<string> attrsSELECT;
-
-	string attrTemp = "";
-	for (i = locSELECT; i < locFROM - 6; i ++) {
-		if (queryCmd.substr(i,1).compare(",") != 0) {
-			// add a letter
-			attrTemp += queryCmd.substr(i,1);
-		} else {
-			// push it back and restart
-			attrsSELECT.push_back(attrTemp);
-			attrTemp = "";
-		}
+	for (int i = 0; i < ops.size(); i ++) {
+		if (ops[i].compare(token) == 0) return true;
 	}
 
-	// need to get the table to select FROM
-    string tableFROM = "";
-    
-    for (i = locFROM; i < locWHERE; i ++) {
-        if (queryCmd.substr(i,1).compare(",") != 0)
-            break;
-        else
-            tableFROM += string(queryCmd.substr(i,1));
-    }
-    
-    // need to parse WHERE clause, using a stack and a mini lang evalulator like last year
-    //REMEBER TO INCLUDE <stack.h> IN MAIN!
-	vector<Table> tables = getTables();
-	Table table = Table();
-	Record record = Record();
+	return false;
+}
 
+bool isParens(string token) {
+	if (token.compare("(") == 0 || token.compare(")") == 0) return true;
+	else return false;
+}
+
+bool isBool(string token) {
+	if (token.compare("true") == 0) return true;
+	if (token.compare("false") == 0) return true;
+	return false;
+}
+
+queue<string> expressionToPostfix(string exp) {
+	vector<string> tokens;
+
+	// first, put the exp into a vector of tokens
 	stringstream ss;
 	string token;
-	string operand, operand1, operand2;
-	vector<string> tokens;
+	ss << exp;
+	while (ss >> token) {
+		tokens.push_back(token);
+		token.clear();
+	}
+
+	// read the tokens into postfix queue
 	queue<string> output;
-	stack<string> operators;
-	stack<string> expression;
-	stack<string> operation;
+	stack<string> t_stack;
 
-	// find the correct table that we'll be querying
-	for(int i = 0; i < tables.size(); i++)
-	{
-		if(tables[i].getName().compare(tableFROM))
-			table = getTables()[i];
+	for (int i = 0; i < tokens.size(); i ++) {
+		cout << i << " : " << tokens[i] << endl;
 	}
 
-	// convert the where clause into a list of tokens
-	string whereClause = queryCmd.substr(locWHERE, queryCmd.length());
-	ss << whereClause;
-	while(ss >> token) tokens.push_back(token);
+	for (int i = 0; i < tokens.size(); i ++) {
+		token = tokens[i];
 
-	// convert the list of tokens into a postfix expressinon
-	for(int i=0; i<tokens.size(); i++)
-	{
-		if(tokens[i].compare("("))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare(")"))
-		{
-			while(operators.top() != "(")
-			{
-				output.push(operators.top());
-				operators.pop();
-			}
-			operators.pop();
+		if (!isOp(token) && !isParens(token)) {
+			output.push(token);
 		}
-		else if(tokens[i].compare("="))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare(">"))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare("<"))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare("!="))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare(">="))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare("<="))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare("&&"))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare("||"))
-			operators.push(tokens[i]);
-		else if(tokens[i].compare("!"))
-			operators.push(tokens[i]);
-		else
-		{
-			tokens[i] = operand;
-			output.push(operand);
+		else if (isOp(token) && !isParens(token)) {
+			t_stack.push(token);
 		}
-
-		expression.push(output.front());
-		output.pop();
-	}
-
-	//evaluate postfix expression
-	while(!expression.empty())
-	{
-		if(expression.top() == operand)
-			operation.push(operand);
-		else
-		{
-			operand2 = operation.top();	// value
-			operation.pop();
-			operand1 = operation.top(); // attribute
-			operation.pop();
-
-			vector<AttributeTypeTuple> attrsAndNames = table.getAttributes();
-			int typeVal;
-			int	index = -1; 
-			
-			if((operand2 != "true") && (operation.top() != "false"))
-			{			
-				for(int i = 0; i < attrsAndNames.size(); i++)
-				{
-					if(attrsAndNames[i].getAttribute() == operand2)
-					{
-						typeVal = attrsAndNames[i].getTypeInt();
-						index = i;
-						break;
-					}
+		else if (isParens(token)) {
+			if (token.compare("(") == 0) t_stack.push(token);
+			else {
+				while (t_stack.top().compare("(") != 0) {
+					output.push(t_stack.top());
+					t_stack.pop();
 				}
-			}
-			
-			if(index = -1)
-				throw Database_exception("Attribute type not found!");
-			
-			for(int i=0; i<table.getSize(); i++)
-			{
-				if(operation.top().compare("="))
-				{
-					switch(typeVal)
-					{
-						case 0:
-						{
-							string val = record.getStringValue(index);
-							if(val.compare(operand1) == 0)
-								operation.push("true");
-							else
-								operation.push("false");
-						}
-						break;
-						case 1:
-						{
-							float val = record.getFloatValue(index);
-							if(val == stringToFloat(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-						}
-						break;
-						case 2:
-						{
-							int val = record.getIntValue(index);
-							if(val == stringToInt(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-						}
-						break;
-						case 3:
-						{
-							Date val = record.getDateValue(index);
-							if(val.compare(stringToDate(operand1)) == 0)
-								operation.push("true");
-							else
-								operation.push("false");
-						}
-						break;
-					}
-				}
-				
-				else if(operation.top().compare(">"))
-				{
-					switch(typeVal)
-					{
-						case 0:
-						{
-							string val = record.getStringValue(index);
-							if(val.compare(operand1) > 0)
-								operation.push("true");
-							else
-								operation.push("false");
-						}
-						break;
-						case 1:
-						{
-							float val = record.getFloatValue(index);
-							if(val > stringToFloat(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-						}
-						break;
-						case 2:
-						{
-							int val = record.getIntValue(index);
-							if(val > stringToInt(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-						}
-						break;
-						case 3:
-						{
-							Date val = record.getDateValue(index);
-							if(val.compare(stringToDate(operand1)) > 0)
-								operation.push("true");
-							else
-								operation.push("false");
-						}
-						break;
-					}
-				}
-				else if(operation.top().compare("<"))
-				{
-					switch(typeVal)
-					{
-						case 0:
-						{
-							string val = record.getStringValue(index);
-							if(val.compare(operand1) < 0)
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 1:
-						{
-							float val = record.getFloatValue(index);
-							if(val < stringToFloat(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 2:
-						{
-							int val = record.getIntValue(index);
-							if(val < stringToInt(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 3:
-						{
-							Date val = record.getDateValue(index);
-							if(val.compare(stringToDate(operand1)) < 0)
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-					}
-				}
-				else if(operation.top().compare("!="))
-				{
-					switch(typeVal)
-					{
-						case 0:
-						{
-							string val = record.getStringValue(index);
-							if(val.compare(operand1) != 0)
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 1:
-						{
-							float val = record.getFloatValue(index);
-							if(val != stringToFloat(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 2:
-						{
-							int val = record.getIntValue(index);
-							if(val != stringToInt(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 3:
-						{
-							Date val = record.getDateValue(index);
-							if(val.compare(stringToDate(operand1)) != 0)
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-					}
-				}
-				else if(operation.top().compare(">="))
-				{
-					switch(typeVal)
-					{
-						case 0:
-						{
-							string val = record.getStringValue(index);
-							if((val.compare(operand1) > 0) || (val.compare(operand1) == 0))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 1:
-						{
-							float val = record.getFloatValue(index);
-							if(val > stringToFloat(operand1) || val == stringToFloat(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 2:
-						{
-							int val = record.getIntValue(index);
-							if(val > stringToInt(operand1) || val == stringToInt(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 3:
-						{
-							Date val = record.getDateValue(index);
-							if((val.compare(stringToDate(operand1)) > 0) || (val.compare(stringToDate(operand1)) == 0))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-					}
-				}
-				else if(operation.top().compare("<="))
-				{
-					switch(typeVal)
-					{
-						case 0:
-						{
-							string val = record.getStringValue(index);
-							if((val.compare(operand1) < 0) || (val.compare(operand1) == 0))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 1:
-						{
-							float val = record.getFloatValue(index);
-							if(val < stringToFloat(operand1) || val == stringToFloat(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 2:
-						{
-							int val = record.getIntValue(index);
-							if(val < stringToInt(operand1) || val == stringToInt(operand1))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-						case 3:
-						{
-							Date val = record.getDateValue(index);
-							if((val.compare(stringToDate(operand1)) < 0) || (val.compare(stringToDate(operand1)) == 0))
-								operation.push("true");
-							else
-								operation.push("false");
-							break;
-						}
-					}
-				}
-				else if(operation.top().compare("&&"))
-				{
-					string val = record.getStringValue(index);
-					if((val.compare("true") == 0) && (operand.compare("true") == 0))
-						operation.push("true");
-					else
-						operation.push("false");		
-				}
-				else if(operation.top().compare("||"))
-				{
-					string val = record.getStringValue(index);
-					if((val.compare("true") == 0) || (operand.compare("true") == 0))
-						operation.push("true");
-					else
-						operation.push("false");		
-				}
-				else if(operation.top().compare("!"))
-				{
-					string val = record.getStringValue(index);
-					if(val.compare("true") == 0)
-						operation.push("false");
-					else
-						operation.push("true");		
-				}
-				else
-					throw Database_exception("Unknown operand (known operands include: =, !=, <, >, <=, >=, &&, ||, !)");
+				t_stack.pop();
 			}
 		}
 	}
+
+	while(!t_stack.empty()) {
+		output.push(t_stack.top());
+		t_stack.pop();
+	}
+
+	return output;
 }
 
 float Database::stringToFloat(string type)
@@ -490,6 +145,320 @@ Date Database::stringToDate(string type)
 	ss << type;
 	ss >> d >> m >> y;
 	return Date(y,m,d);
+}
+
+int lookupOp(string op, Table tableFrom) {
+	for (int i = 0; i < tableFrom.getSize(); i ++) {
+		if (tableFrom.getAttributes()[i].getAttribute().compare(op) == 0) return i;
+	}
+
+	throw Database_exception("Couldn't find a variable in the query");
+}
+
+string evalE(string op1, string op2, Table tableFrom, Record record) {
+	// lookup op1
+	if (!isBool(op1)) {
+		int i = lookupOp(op1, tableFrom);
+		op1 = record.getValue(i);
+	}
+	// do operation
+	if (op1.compare(op2) == 0) return "true";
+	else return "false";
+}
+string evalG(string op1, string op2, Table tableFrom, Record record) {
+	// lookup op1
+	int i = lookupOp(op1, tableFrom);
+	op1 = record.getValue(i);
+	// do operation
+	if (tableFrom.getAttributes()[i].getAttribute() == "string") {
+		if (op1.compare(op2) == 0) return "true";
+		else return "false";
+	}
+	else {
+		if (op1.compare(op2) > 0) return "true";
+		else return "false";
+	}
+}
+string evalL(string op1, string op2, Table tableFrom, Record record) {
+	// lookup op1
+	int i = lookupOp(op1, tableFrom);
+	op1 = record.getValue(i);
+	// do operation
+	if (tableFrom.getAttributes()[i].getAttribute() == "string") {
+		if (op1.compare(op2) == 0) return "true";
+		else return "false";
+	}
+	else {
+		if (op1.compare(op2) < 0) return "true";
+		else return "false";
+	}
+}
+string evalNE(string op1, string op2, Table tableFrom, Record record) {
+	// lookup op1
+	if (!isBool(op1)) {
+		int i = lookupOp(op1, tableFrom);
+		op1 = record.getValue(i);
+	}
+	// do operation
+	if (op1.compare(op2) != 0) return "true";
+	else return "false";
+}
+string evalGE(string op1, string op2, Table tableFrom, Record record) {
+	// lookup op1
+	int i = lookupOp(op1, tableFrom);
+	op1 = record.getValue(i);
+	// do operation
+	if (tableFrom.getAttributes()[i].getAttribute() == "string") {
+		if (op1.compare(op2) == 0) return "true";
+		else return "false";
+	}
+	else {
+		if (op1.compare(op2) > 0) return "true";
+		if (op1.compare(op2) == 0) return "true";
+		return "false";
+	}
+}
+string evalLE(string op1, string op2, Table tableFrom, Record record) {
+	// lookup op1
+	int i = lookupOp(op1, tableFrom);
+	op1 = record.getValue(i);
+	// do operation
+	if (tableFrom.getAttributes()[i].getAttribute() == "string") {
+		if (op1.compare(op2) == 0) return "true";
+		else return "false";
+	}
+	else {
+		if (op1.compare(op2) < 0) return "true";
+		if (op1.compare(op2) == 0) return "true";
+		return "false";
+	}
+}
+string evalA(string op1, string op2, Table tableFrom, Record record) {
+	if (op1.compare(op2) == 0) return "true";
+	else return "false";
+}
+string evalO(string op1, string op2, Table tableFrom, Record record) {
+	if (op1.compare("true") == 0 || op2.compare("true") == 0) return "true";
+	else return "false";
+}
+
+Table Database::query(string queryCmd) {
+	// create necessary tables
+	Table returnTable = Table();
+	Table tableFrom = Table();
+
+	// get the indicies of the starting positions of the three parts of the query
+	int select_i = -1, from_i = -1, where_i = -1;
+
+	for (int i = 0; i < queryCmd.length(); i ++) {
+		if (queryCmd.substr(i,6).compare("SELECT") == 0) select_i = i + 6;
+		if (queryCmd.substr(i,4).compare("FROM") == 0) from_i = i + 4;
+		if (queryCmd.substr(i,5).compare("WHERE") == 0) where_i = i + 5;
+	}
+
+	// build a string vector of the attributes to return
+	string attrTemp = "";
+	vector<string> attrStrings;
+	for (int i = select_i; i < from_i - 4; i ++) {
+		if (queryCmd.substr(i,1).compare(",") != 0) attrTemp += queryCmd.substr(i,1);
+		if (queryCmd.substr(i,1).compare(",") == 0 || i == from_i - 4 - 1) {
+			trimWS(attrTemp);
+			attrStrings.push_back(attrTemp);
+			attrTemp = "";
+		}
+	}
+
+	// get the table to select from
+	string tableFromName = queryCmd.substr(from_i + 1, where_i - 5 - from_i - 2);
+	bool found = false;
+	for (int i = 0; i < getTables().size(); i ++) {
+		if (getTables()[i].getName().compare(tableFromName) == 0) {
+			tableFrom = Table(getTables()[i]);
+			found = true;
+		}
+	}
+	if (!found) throw Database_exception("Couldn't find the table specified [" + tableFromName + "]");
+
+	// put those attributes in returnTable
+	for (int i = 0; i < tableFrom.getAttributes().size(); i ++) {
+		returnTable.add(tableFrom.getAttributes()[i]);
+	}
+
+	// remove unessecary attributes
+	for (int i = 0; i < returnTable.getAttributes().size(); i ++) {
+		bool goodAttr = false;
+		for (int j = 0; j < attrStrings.size(); j ++) {
+			if (returnTable.getAttributes()[i].getAttribute().compare(attrStrings[j]) == 0 || attrStrings[0].compare("*")) goodAttr = true;
+		}
+
+		if (!goodAttr) returnTable.deleteATT(returnTable.getAttributes()[i].getAttribute());
+	}
+
+	// at this point, returnTable has the correct aTTs, and fromTable is the table we're selecting from
+
+	// convert the where clause into postfix
+	string exp = queryCmd.substr(where_i + 1,queryCmd.length() - where_i);
+	queue<string> postfix = expressionToPostfix(exp);
+
+	// for each record, evaluate the postfix exp for it's values, then add it to the returnTable if it's true
+	for (int i = 0; i < tableFrom.getSize(); i ++) {
+		Record testRecord = tableFrom[i];
+		queue<string> testPostfix = postfix;
+		stack<string> t_stack;
+
+		while (!testPostfix.empty()) {
+			string token = testPostfix.front();
+			testPostfix.pop();
+			
+			// if its a value, move it to the stack
+			if (!isOp(token)) t_stack.push(token);
+
+			// its an operator, pop off two values and evaluate them
+			else {
+				string op2 = t_stack.top();
+				t_stack.pop();
+				string op1 = t_stack.top();
+				t_stack.pop();
+
+				// evaluate
+				if (token == "=") {
+					t_stack.push(evalE(op1,op2, tableFrom, testRecord));
+				} else if (token == ">") {
+					t_stack.push(evalG(op1,op2, tableFrom, testRecord));
+				} else if (token == "<") {
+					t_stack.push(evalL(op1,op2, tableFrom, testRecord));
+				} else if (token == "!=") {
+					t_stack.push(evalNE(op1,op2, tableFrom, testRecord));
+				} else if (token == ">=") {
+					t_stack.push(evalGE(op1,op2, tableFrom, testRecord));
+				} else if (token == "<=") {
+					t_stack.push(evalLE(op1,op2, tableFrom, testRecord));
+				} else if (token == "&&") {
+					t_stack.push(evalA(op1,op2, tableFrom, testRecord));
+				} else if (token == "||") {
+					t_stack.push(evalO(op1,op2, tableFrom, testRecord));
+				}
+			}
+		}
+
+		// if true remains, then the record is true and can be added to the returnTable
+		if (t_stack.top() == "true") {
+			returnTable.insert(testRecord);
+		}
+
+	}
+
+	return returnTable;
+
+}
+
+void Database::deleteQuery(string queryCmd) {
+	// create necessary tables
+	Table returnTable = Table();
+	Table tableFrom = Table();
+
+	// get the indicies of the starting positions of the three parts of the query
+	int select_i = -1, from_i = -1, where_i = -1;
+
+	for (int i = 0; i < queryCmd.length(); i ++) {
+		if (queryCmd.substr(i,6).compare("SELECT") == 0) select_i = i + 6;
+		if (queryCmd.substr(i,4).compare("FROM") == 0) from_i = i + 4;
+		if (queryCmd.substr(i,5).compare("WHERE") == 0) where_i = i + 5;
+	}
+
+	// build a string vector of the attributes to return
+	string attrTemp = "";
+	vector<string> attrStrings;
+	for (int i = select_i; i < from_i - 4; i ++) {
+		if (queryCmd.substr(i,1).compare(",") != 0) attrTemp += queryCmd.substr(i,1);
+		if (queryCmd.substr(i,1).compare(",") == 0 || i == from_i - 4 - 1) {
+			trimWS(attrTemp);
+			attrStrings.push_back(attrTemp);
+			attrTemp = "";
+		}
+	}
+
+	// get the table to select from
+	string tableFromName = queryCmd.substr(from_i + 1, where_i - 5 - from_i - 2);
+	bool found = false;
+	for (int i = 0; i < getTables().size(); i ++) {
+		if (getTables()[i].getName().compare(tableFromName) == 0) {
+			tableFrom = Table(getTables()[i]);
+			found = true;
+		}
+	}
+	if (!found) throw Database_exception("Couldn't find the table specified [" + tableFromName + "]");
+
+	// put those attributes in returnTable
+	for (int i = 0; i < tableFrom.getAttributes().size(); i ++) {
+		returnTable.add(tableFrom.getAttributes()[i]);
+	}
+
+	// remove unessecary attributes
+	for (int i = 0; i < returnTable.getAttributes().size(); i ++) {
+		bool goodAttr = false;
+		for (int j = 0; j < attrStrings.size(); j ++) {
+			if (returnTable.getAttributes()[i].getAttribute().compare(attrStrings[j]) == 0 || attrStrings[0].compare("*")) goodAttr = true;
+		}
+
+		if (!goodAttr) returnTable.deleteATT(returnTable.getAttributes()[i].getAttribute());
+	}
+
+	// at this point, returnTable has the correct aTTs, and fromTable is the table we're selecting from
+
+	// convert the where clause into postfix
+	string exp = queryCmd.substr(where_i + 1,queryCmd.length() - where_i);
+	queue<string> postfix = expressionToPostfix(exp);
+
+	// for each record, evaluate the postfix exp for it's values, then add it to the returnTable if it's true
+	for (int i = 0; i < tableFrom.getSize(); i ++) {
+		Record testRecord = tableFrom[i];
+		queue<string> testPostfix = postfix;
+		stack<string> t_stack;
+
+		while (!testPostfix.empty()) {
+			string token = testPostfix.front();
+			testPostfix.pop();
+			
+			// if its a value, move it to the stack
+			if (!isOp(token)) t_stack.push(token);
+
+			// its an operator, pop off two values and evaluate them
+			else {
+				string op2 = t_stack.top();
+				t_stack.pop();
+				string op1 = t_stack.top();
+				t_stack.pop();
+
+				// evaluate
+				if (token == "=") {
+					t_stack.push(evalE(op1,op2, tableFrom, testRecord));
+				} else if (token == ">") {
+					t_stack.push(evalG(op1,op2, tableFrom, testRecord));
+				} else if (token == "<") {
+					t_stack.push(evalL(op1,op2, tableFrom, testRecord));
+				} else if (token == "!=") {
+					t_stack.push(evalNE(op1,op2, tableFrom, testRecord));
+				} else if (token == ">=") {
+					t_stack.push(evalGE(op1,op2, tableFrom, testRecord));
+				} else if (token == "<=") {
+					t_stack.push(evalLE(op1,op2, tableFrom, testRecord));
+				} else if (token == "&&") {
+					t_stack.push(evalA(op1,op2, tableFrom, testRecord));
+				} else if (token == "||") {
+					t_stack.push(evalO(op1,op2, tableFrom, testRecord));
+				}
+			}
+		}
+
+		// if true remains, then the record is true and can be deleted from the db
+		for (int i = 0; i < listTables().size(); i ++) {
+			if (listTables()[i].compare(tableFromName) == 0) {
+				tables.erase(tables.begin() + i);
+				break;
+			}
+		}
+	}
 }
 
 
