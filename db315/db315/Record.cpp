@@ -57,9 +57,13 @@ Date Record::getDateValue(int i) {
 }
 
 string Record::operator[](int i) const{
-	return values[i];
+	if (i < values.size())
+		return values[i];
+	else throw Database_exception("Record out of bounds!");
 }
 
 string & Record::operator[](int i){
-	return values[i];
+	if (i < values.size())
+		return values[i];
+	else throw Database_exception("Record out of bounds!");
 }

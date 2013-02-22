@@ -1,24 +1,19 @@
-﻿Build started 2/21/2013 5:26:33 PM.
+﻿Build started 2/21/2013 11:45:31 PM.
 Project "E:\database315\db315\db315\db315.vcxproj" on node 2 (Build target(s)).
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Database.cpp
-  Database.cpp
-e:\database315\db315\db315\database.cpp(12): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(21): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(56): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(90): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(94): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(253): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(274): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(283): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(288): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(290): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(363): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(384): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(393): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(398): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(400): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\db315\db315\database.cpp(455): warning C4018: '<' : signed/unsigned mismatch
+  C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt maintest.cpp
+  maintest.cpp
+e:\database315\db315\db315\maintest.cpp(27): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\maintest.cpp(48): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\maintest.cpp(92): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\maintest.cpp(104): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\maintest.cpp(151): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\maintest.cpp(187): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\maintest.cpp(197): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\maintest.cpp(201): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\db315\db315\maintest.cpp(273): warning C4101: 'e' : unreferenced local variable
+e:\database315\db315\db315\maintest.cpp(283): warning C4101: 'e' : unreferenced local variable
+e:\database315\db315\db315\maintest.cpp(461): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
 Link:
   C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\database315\db315\Debug\db315.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\database315\db315\Debug\db315.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\database315\db315\Debug\db315.lib" /MACHINE:X86 Debug\AttributeTypeTuple.obj
   Debug\Database.obj
@@ -32,4 +27,4 @@ Done Building Project "E:\database315\db315\db315\db315.vcxproj" (Build target(s
 
 Build succeeded.
 
-Time Elapsed 00:00:03.84
+Time Elapsed 00:00:07.21
