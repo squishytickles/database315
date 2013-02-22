@@ -560,8 +560,6 @@ BOOST_AUTO_TEST_CASE(Test_Query)
 	query += "WHERE age = 25";
 	Table youngPeople = database.query(query);
 
-	cout << "PAST QUERY!";
-
 	if (youngPeople.getSize() != 1)
 		BOOST_ERROR("Incorrect number of Records returned from first query");
 	else if (youngPeople[0][0].compare("Sally") != 0)
@@ -651,10 +649,9 @@ BOOST_AUTO_TEST_CASE(Test_Database_Functions)
 	query += "FROM CrossedTable ";			// fixed added FROM
 	query += "WHERE ( name = Bob && age != 25 ) || ( name = Sally && city != London )";	// fixed added WHERE, = not ==
 	Table wrongInfo = database.query(query);
-	cout << wrongInfo.getSize() << endl;
 
 	if (wrongInfo.getSize() != 2)
-		BOOST_ERROR("Query did not return the correct number of Records in table" + to_string(wrongInfo.getSize()));
+		BOOST_ERROR("Query did not return the correct number of Records in table");
 
 }
 

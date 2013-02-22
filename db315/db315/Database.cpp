@@ -257,23 +257,6 @@ string evalO(string op1, string op2, Table tableFrom, Record record) {
 	else return "false";
 }
 
-void printStack(stack<string> s) {
-	cout << "CURRENT STACK" << endl;
-	while(!s.empty()) {
-		cout << s.top() << endl;
-		s.pop();
-	}
-}
-
-void printQueue(queue<string> d) {
-	cout << "CURRENT QUEUE" << endl;
-	while(!d.empty()) {
-		cout << d.front() << endl;
-		d.pop();
-	}
-	cout << endl;
-}
-
 Table Database::query(string queryCmd) {
 	// create necessary tables
 	Table returnTable = Table();
@@ -334,24 +317,12 @@ Table Database::query(string queryCmd) {
 
 	// for each record, evaluate the postfix exp for it's values, then add it to the returnTable if it's true
 	for (int i = 0; i < tableFrom.getSize(); i ++) {
-		cout << "TESTING RECORD " << i << " _______________________________" <<  endl;
 
 		Record testRecord = tableFrom[i];
 		queue<string> testPostfix = postfix;
 		stack<string> t_stack;
 
-
-
-		cout << "RECORD " << endl;
-		for (int j = 0; j < tableFrom.getAttributes().size(); j ++) {
-			cout << "[" << testRecord.getValue(j) << "] ";
-		} cout << endl;
-
-
-		printQueue(testPostfix);
-
 		while (!testPostfix.empty()) {
-			printStack(t_stack);
 			string token = testPostfix.front();
 			testPostfix.pop();
 			
@@ -365,26 +336,24 @@ Table Database::query(string queryCmd) {
 				string op1 = t_stack.top();
 				t_stack.pop();
 
-				cout << "COMP " << op1 << " AND " << op2 << endl;
-
 				// evaluate
 				if (token.compare("=") == 0) {
-					t_stack.push(evalE(op1,op2, tableFrom, testRecord)); cout << "=" << endl;
+					t_stack.push(evalE(op1,op2, tableFrom, testRecord));
 				} else if (token.compare(">") == 0) {
-					t_stack.push(evalG(op1,op2, tableFrom, testRecord)); cout << ">" << endl;
+					t_stack.push(evalG(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("<") == 0) {
-					t_stack.push(evalL(op1,op2, tableFrom, testRecord)); cout << "<" << endl;
+					t_stack.push(evalL(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("!=") == 0) {
-					t_stack.push(evalNE(op1,op2, tableFrom, testRecord)); cout << "!=" << endl;
+					t_stack.push(evalNE(op1,op2, tableFrom, testRecord));
 				} else if (token.compare(">=") == 0) {
-					t_stack.push(evalGE(op1,op2, tableFrom, testRecord)); cout << ">=" << endl;
+					t_stack.push(evalGE(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("<=") == 0) {
-					t_stack.push(evalLE(op1,op2, tableFrom, testRecord)); cout << "<=" << endl;
+					t_stack.push(evalLE(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("&&") == 0) {
-					t_stack.push(evalA(op1,op2, tableFrom, testRecord)); cout << "&&" << endl;
+					t_stack.push(evalA(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("||") == 0) {
-					t_stack.push(evalO(op1,op2, tableFrom, testRecord)); cout << "||" << endl;
-				} else throw Database_exception("OH NO NOT ENOUGH SKITTLES");
+					t_stack.push(evalO(op1,op2, tableFrom, testRecord));
+				} else throw Database_exception("Evaluation fault, likely bad query string");
 			}
 		}
 
@@ -395,12 +364,11 @@ Table Database::query(string queryCmd) {
 
 	}
 
-	cout << "SIZE " << returnTable.getSize() << endl;
 	return returnTable;
 
 }
 
-Table Database::deleteQuery(string queryCmd) {
+void Database::deleteQuery(string queryCmd) {
 	// create necessary tables
 	Table returnTable = Table();
 	Table tableFrom = Table();
@@ -466,7 +434,6 @@ Table Database::deleteQuery(string queryCmd) {
 		stack<string> t_stack;
 
 		while (!testPostfix.empty()) {
-			printStack(t_stack);
 			string token = testPostfix.front();
 			testPostfix.pop();
 			
@@ -482,21 +449,21 @@ Table Database::deleteQuery(string queryCmd) {
 
 				// evaluate
 				if (token.compare("=") == 0) {
-					t_stack.push(evalE(op1,op2, tableFrom, testRecord)); cout << "=" << endl;
+					t_stack.push(evalE(op1,op2, tableFrom, testRecord));
 				} else if (token.compare(">") == 0) {
-					t_stack.push(evalG(op1,op2, tableFrom, testRecord)); cout << ">" << endl;
+					t_stack.push(evalG(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("<") == 0) {
-					t_stack.push(evalL(op1,op2, tableFrom, testRecord)); cout << "<" << endl;
+					t_stack.push(evalL(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("!=") == 0) {
-					t_stack.push(evalNE(op1,op2, tableFrom, testRecord)); cout << "!=" << endl;
+					t_stack.push(evalNE(op1,op2, tableFrom, testRecord));
 				} else if (token.compare(">=") == 0) {
-					t_stack.push(evalGE(op1,op2, tableFrom, testRecord)); cout << ">=" << endl;
+					t_stack.push(evalGE(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("<=") == 0) {
-					t_stack.push(evalLE(op1,op2, tableFrom, testRecord)); cout << "<=" << endl;
+					t_stack.push(evalLE(op1,op2, tableFrom, testRecord));
 				} else if (token.compare("&&") == 0) {
-					t_stack.push(evalA(op1,op2, tableFrom, testRecord)); cout << "&&" << endl;
+					t_stack.push(evalA(op1,op2, tableFrom, testRecord)); 
 				} else if (token.compare("||") == 0) {
-					t_stack.push(evalO(op1,op2, tableFrom, testRecord)); cout << "||" << endl;
+					t_stack.push(evalO(op1,op2, tableFrom, testRecord));
 				} else throw Database_exception("Evaluation failed, likely bad query string");
 			}
 		}
@@ -505,7 +472,7 @@ Table Database::deleteQuery(string queryCmd) {
 		if (t_stack.top().compare("true") == 0) {
 			for (int i = 0; i < tables.size(); i ++) {
 				// if *, remove whole record
-				if (attrStrings[0].compare("*") == ) {
+				if (attrStrings[0].compare("*") == 0) {
 					if (tables[i].getName().compare(tableFromName) == 0) {
 						dropTable(tableFromName);
 					}
