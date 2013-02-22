@@ -41,3 +41,9 @@ Link:
   Debug\Record.obj
   Debug\Table.obj
   Debug\TableIterator.obj
+  db315.vcxproj -> E:\database315\db315\Debug\db315.exe
+Done Building Project "E:\database315\db315\db315\db315.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:17.15
