@@ -100,6 +100,7 @@ public:
 	// functions
 	void addValue(string t);
 	void removeValue(int i);
+	void nullValue(int i);
 	string getStringValue(int i);
 	float getFloatValue(int i);
 	int getIntValue(int i);

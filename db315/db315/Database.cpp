@@ -399,3 +399,139 @@ Table Database::query(string queryCmd) {
 	return returnTable;
 
 }
+
+Table Database::deleteQuery(string queryCmd) {
+	// create necessary tables
+	Table returnTable = Table();
+	Table tableFrom = Table();
+
+	// get the indicies of the starting positions of the three parts of the query
+	int select_i = -1, from_i = -1, where_i = -1;
+
+	for (int i = 0; i < queryCmd.length(); i ++) {
+		if (queryCmd.substr(i,6).compare("SELECT") == 0) select_i = i + 6;
+		if (queryCmd.substr(i,4).compare("FROM") == 0) from_i = i + 4;
+		if (queryCmd.substr(i,5).compare("WHERE") == 0) where_i = i + 5;
+	}
+
+	// build a string vector of the attributes to return
+	string attrTemp = "";
+	vector<string> attrStrings;
+	for (int i = select_i; i < from_i - 4; i ++) {
+		if (queryCmd.substr(i,1).compare(",") != 0) attrTemp += queryCmd.substr(i,1);
+		if (queryCmd.substr(i,1).compare(",") == 0 || i == from_i - 4 - 1) {
+			trimWS(attrTemp);
+			attrStrings.push_back(attrTemp);
+			attrTemp = "";
+		}
+	}
+
+	// get the table to select from
+	string tableFromName = queryCmd.substr(from_i + 1, where_i - 5 - from_i - 2);
+	bool found = false;
+	for (int i = 0; i < getTables().size(); i ++) {
+		if (getTables()[i].getName().compare(tableFromName) == 0) {
+			tableFrom = Table(getTables()[i]);
+			found = true;
+		}
+	}
+	if (!found) throw Database_exception("Couldn't find the table specified [" + tableFromName + "]");
+
+	// put those attributes in returnTable
+	for (int i = 0; i < tableFrom.getAttributes().size(); i ++) {
+		returnTable.add(tableFrom.getAttributes()[i]);
+	}
+
+	// remove unessecary attributes
+	for (int i = 0; i < returnTable.getAttributes().size(); i ++) {
+		bool goodAttr = false;
+		for (int j = 0; j < attrStrings.size(); j ++) {
+			if (returnTable.getAttributes()[i].getAttribute().compare(attrStrings[j]) == 0 || attrStrings[0].compare("*") == 0) goodAttr = true;
+		}
+
+		if (!goodAttr) returnTable.deleteATT(returnTable.getAttributes()[i].getAttribute());
+	}
+
+	// at this point, returnTable has the correct aTTs, and fromTable is the table we're selecting from
+
+	// convert the where clause into postfix
+	string exp = queryCmd.substr(where_i + 1,queryCmd.length() - where_i);
+	queue<string> postfix = expressionToPostfix(exp);
+
+	// for each record, evaluate the postfix exp for it's values, then add it to the returnTable if it's true
+	for (int i = 0; i < tableFrom.getSize(); i ++) {
+
+		Record testRecord = tableFrom[i];
+		queue<string> testPostfix = postfix;
+		stack<string> t_stack;
+
+		while (!testPostfix.empty()) {
+			printStack(t_stack);
+			string token = testPostfix.front();
+			testPostfix.pop();
+			
+			// if its a value, move it to the stack
+			if (!isOp(token)) t_stack.push(token);
+
+			// its an operator, pop off two values and evaluate them
+			else {
+				string op2 = t_stack.top();
+				t_stack.pop();
+				string op1 = t_stack.top();
+				t_stack.pop();
+
+				// evaluate
+				if (token.compare("=") == 0) {
+					t_stack.push(evalE(op1,op2, tableFrom, testRecord)); cout << "=" << endl;
+				} else if (token.compare(">") == 0) {
+					t_stack.push(evalG(op1,op2, tableFrom, testRecord)); cout << ">" << endl;
+				} else if (token.compare("<") == 0) {
+					t_stack.push(evalL(op1,op2, tableFrom, testRecord)); cout << "<" << endl;
+				} else if (token.compare("!=") == 0) {
+					t_stack.push(evalNE(op1,op2, tableFrom, testRecord)); cout << "!=" << endl;
+				} else if (token.compare(">=") == 0) {
+					t_stack.push(evalGE(op1,op2, tableFrom, testRecord)); cout << ">=" << endl;
+				} else if (token.compare("<=") == 0) {
+					t_stack.push(evalLE(op1,op2, tableFrom, testRecord)); cout << "<=" << endl;
+				} else if (token.compare("&&") == 0) {
+					t_stack.push(evalA(op1,op2, tableFrom, testRecord)); cout << "&&" << endl;
+				} else if (token.compare("||") == 0) {
+					t_stack.push(evalO(op1,op2, tableFrom, testRecord)); cout << "||" << endl;
+				} else throw Database_exception("Evaluation failed, likely bad query string");
+			}
+		}
+
+		// remove
+		if (t_stack.top().compare("true") == 0) {
+			for (int i = 0; i < tables.size(); i ++) {
+				// if *, remove whole record
+				if (attrStrings[0].compare("*") == ) {
+					if (tables[i].getName().compare(tableFromName) == 0) {
+						dropTable(tableFromName);
+					}
+				}
+				// otherwise need to null out
+				else {
+					// get the right table
+					if (tables[i].getName().compare(tableFromName) == 0) {
+						// for each removeable attribute
+						for (int j = 0; j < tables[i].getAttributes().size(); j ++) {
+							for (int k = 0; k < attrStrings.size(); k ++) {
+								// if this attribute is to be deleted
+								if (tables[i].getAttributes()[j].getAttribute().compare(attrStrings[k]) == 0) {
+									for (int l = 0; l < tables[i].getSize(); l ++) {
+										tables[i][l].nullValue(j);
+									}
+								}
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+}

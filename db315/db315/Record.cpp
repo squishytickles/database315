@@ -26,6 +26,10 @@ string Record::getValue(int i) {
 	return values[i];
 }
 
+void Record::nullValue(int i) {
+	values[i] = "";
+}
+
 string Record::getStringValue(int i) {
 	return values[i];
 }
