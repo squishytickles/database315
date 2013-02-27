@@ -33,7 +33,6 @@ Database populateDB(string fileListName) {
 	for (int i = 0; i < inputFiles.size(); i ++) {
 		string line;
 		string newTableName = inputFiles[i];
-		Table newTable = Table();
 		
 		vector<string> dataLines;
 		
@@ -45,42 +44,14 @@ Database populateDB(string fileListName) {
 				dataLines.push_back(line);
 			}
 		}
+		inputFile.close();
 		
 		// add the attributes to the table
-		vector<Attribute> attrs = csvGetAttrs(dataLines[0],dataLines[1]);
+		Table newTable = Table(csvGetAttrs(dataLines[0],dataLines[1]);
 		
+		// add the records to the table
 		for (int j = 1; j < dataLines.size(); j ++) {
-			
-			
-		
-		
-		
-		
-		
-		// open the file specified by inputFiles file
-		inputFile(inputFiles[i]);
-		if (inputFile.is_open()) {
-			// first line is all the attributes
-			getline(inputFile,line);
-			
-			// get the attrs
-			vector<string> attrs = csvToVector(line);
-			
-			// update the table with those attrs
-			newTable = Table(attrs);		// FIX - need to figure out the types -- how to do?
-				
-			// now add the records
-			while (inputFile.good()) {
-				getline(inputFile,line);
-				// get the values for the record
-				vector<string> vals = csvToVector(line);
-				
-				// insert the new record
-				Record newRecord = Record(vals);
-				newTable.insertRecord(newRecord);
-			}
-		
-			inputFile.close();
+			newTable.push_back(Record(csvToVector(dataLines[j])));
 		}
 	}
 	
