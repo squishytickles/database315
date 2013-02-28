@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void printTable(Table table);
+void printTable(Table* table);
 vector<string> csvToVector(string csv);
 enum Table::RecordType whatIsType(string str);
 Table::ColumnList csvGetAttrs(string csvAttrs, string csvRec1);
@@ -67,7 +67,7 @@ int main()
 				string table;
 				cout << "Which table do you want to print?" << endl;
 				cin >> table;
-				printTable(*db.table_if_exists(table));
+				printTable(db.table_if_exists(table));
 			}
 		case 4:
 			{
@@ -75,137 +75,145 @@ int main()
 			}
 	}
 
-	switch(custAns) {
-		case 1:
-			{
-				cout << "Enter payment type: " << endl;
-				cin >> payment;
+	if (custAns != 0) {
+		switch(custAns) {
+			case 1:
+				{
+					cout << "Enter payment type: " << endl;
+					cin >> payment;
 
-				Table* result = db.query("userID", "userpayment.csv", "Upayment = '" + payment + "'");
-				printTable(*result);
-				break;
-			}
-		case 2:
-			{
-				cout << "Enter cuisine type: " << endl;
-				cin >> food;
+					Table* result = db.query("userID", "userpayment.csv", "Upayment = '" + payment + "'");
+					printTable(result);
+					break;
+				}
+			case 2:
+				{
+					cout << "Enter cuisine type: " << endl;
+					cin >> food;
 
-				Table* result = db.query("userID", "usercuisine.csv", "Rcuisine = '" + food + "'");
-				printTable(*result);
-				break;
-			}
-		case 3:
-			{
-				cout << "Enter customer ID: " << endl;
-				cin >> userID;
+					Table* result = db.query("userID", "usercuisine.csv", "Rcuisine = '" + food + "'");
+					printTable(result);
+					break;
+				}
+			case 3:
+				{
+					cout << "Enter customer ID: " << endl;
+					cin >> userID;
 
-				Table* result = db.query("*", "userprofile.csv", "userID = '" + userID + "'");
-				printTable(*result);
-				break;
-			}
-		case 4:
-			{
-				cout << "Enter a select clause (comma separated list): " << endl;
-				cin >> selectClause;
-				cout << "Enter a where clause: " << endl;
-				cin >> whereClause;
+					Table* result = db.query("*", "userprofile.csv", "userID = '" + userID + "'");
+					printTable(result);
+					break;
+				}
+			case 4:
+				{
+					cout << "Enter a select clause (comma separated list): " << endl;
+					cin >> selectClause;
+					cout << "Enter a where clause: " << endl;
+					cin >> whereClause;
 
-				Table* result = db.query(selectClause, "userprofile.csv", whereClause);
-				printTable(*result);
-				break;
-			}
-		case 5:
-			{
-				cout << mainprompt << endl;
-				cin >> mainAns;
-				break;
-			}
+					Table* result = db.query(selectClause, "userprofile.csv", whereClause);
+					printTable(result);
+					break;
+				}
+			case 5:
+				{
+					custAns = 0;
+					restAns = 0;
+					cout << mainprompt << endl;
+					cin >> mainAns;
+					break;
+				}
+		}
 	}
 
-	switch(restAns) {
-		case 1:
-			{
-				cout << "Enter rating: " << endl;
-				cin >> rating;
+	if (restAns != 0) {
+		switch(restAns) {
+			case 1:
+				{
+					cout << "Enter rating: " << endl;
+					cin >> rating;
 
-				Table* result = db.query("placeID", "rating_final.csv", "rating = '" + rating + "'");
-				printTable(*result);
-				break;
-			}
-		case 2:
-			{
-				cout << "Enter alcohol type (No_Alcohol_Served, Wine-Beer, or Full_Bar): " << endl;
-				cin >> alcohol;
+					Table* result = db.query("placeID", "rating_final.csv", "rating = '" + rating + "'");
+					printTable(result);
+					break;
+				}
+			case 2:
+				{
+					cout << "Enter alcohol type (No_Alcohol_Served, Wine-Beer, or Full_Bar): " << endl;
+					cin >> alcohol;
 
-				Table* result = db.query("placeID", "geoplaces2.csv", "alcohol = '" + alcohol + "'");
-				printTable(*result);
-				break;
-			}
-		case 3:
-			{
-				cout << "Enter parking type (none, yes, public, valet parking, fee): " << endl;
-				cin >> parking;
+					Table* result = db.query("placeID", "geoplaces2.csv", "alcohol = '" + alcohol + "'");
+					printTable(result);
+					break;
+				}
+			case 3:
+				{
+					cout << "Enter parking type (none, yes, public, valet parking, fee): " << endl;
+					cin >> parking;
 
-				Table* result = db.query("placeID", "chefmozparking.csv", "parking_lot = '" + parking + "'");
-				printTable(*result);
-				break;
-			}
-		case 4:
-			{
-				cout << "Enter cuisine type: " << endl;
-				cin >> food;
+					Table* result = db.query("placeID", "chefmozparking.csv", "parking_lot = '" + parking + "'");
+					printTable(result);
+					break;
+				}
+			case 4:
+				{
+					cout << "Enter cuisine type: " << endl;
+					cin >> food;
 
-				Table* result = db.query("placeID", "chefmozcuisine.csv", "Rcuisine = '" + food + "'");
-				printTable(*result);
-				break;
-			}
-		case 5:
-			{
-				cout << "Enter payment type: " << endl;
-				cin >> payment;
+					Table* result = db.query("placeID", "chefmozcuisine.csv", "Rcuisine = '" + food + "'");
+					printTable(result);
+					break;
+				}
+			case 5:
+				{
+					cout << "Enter payment type: " << endl;
+					cin >> payment;
 
-				Table* result = db.query("placeID", "chefmozaccepts.csv", "Rpayment = '" + payment + "'");
-				printTable(*result);
-				break;
-			}
-		case 6:
-			{
-				cout << "Enter restaurant ID: " << endl;
-				cin >> restID;
+					Table* result = db.query("placeID", "chefmozaccepts.csv", "Rpayment = '" + payment + "'");
+					printTable(result);
+					break;
+				}
+			case 6:
+				{
+					cout << "Enter restaurant ID: " << endl;
+					cin >> restID;
 
-				Table* result = db.query("*", "geoplaces2.csv", "placeID = '" + restID + "'");
-				printTable(*result);
-				break;
-			}
-		case 7:
-			{
-				cout << "Enter a select clause (comma separated list): " << endl;
-				cin >> selectClause;
-				cout << "Enter a where clause: " << endl;
-				cin >> whereClause;
+					Table* result = db.query("*", "geoplaces2.csv", "placeID = '" + restID + "'");
+					printTable(result);
+					break;
+				}
+			case 7:
+				{
+					cout << "Enter a select clause (comma separated list): " << endl;
+					cin >> selectClause;
+					cout << "Enter a where clause: " << endl;
+					cin >> whereClause;
 
-				Table* result = db.query(selectClause, "geoplaces2.csv", whereClause);
-				printTable(*result);
-				break;
-			}
-		case 8:
-			{
-				cout << mainprompt << endl;
-				cin >> mainAns;
-				break;
-			}
-	}	  
+					Table* result = db.query(selectClause, "geoplaces2.csv", whereClause);
+					printTable(result);
+					break;
+				}
+			case 8:
+				{
+					custAns = 0;
+					restAns = 0;
+					cout << mainprompt << endl;
+					cin >> mainAns;
+					break;
+				}
+		}	  
+	}
 	
 	exit(0);
 }
 
-void printTable(Table table)
+void printTable(Table* table)
 { 
-	cout << "RESULT TABLE: " << endl;/*
-	for(int i=0; i<table.size(); i++)
+	cout << "RESULT TABLE: " << endl;
+	for(int i=0; i<table->size(); i++)
 	{
-		Record::RecordIterator begin = table.at(i).begin();
-		Record::RecordIterator end = table.at(i).end();
+		Record::RecordIterator begin = table->at(i).begin();
+		Record::RecordIterator end = table->at(i).end();
 
 		for(Record::RecordIterator it = begin; it != end; it++)
 		{
@@ -213,7 +221,8 @@ void printTable(Table table)
 		}
 
 			cout << endl;
-	}*/
+	}
+	cout << "END OF TABLE" << endl;
 }
 
 // convert a csv string to a vector of strings

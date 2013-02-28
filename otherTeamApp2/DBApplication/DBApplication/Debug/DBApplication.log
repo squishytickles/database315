@@ -1,15 +1,15 @@
-﻿Build started 2/28/2013 3:52:17 PM.
+﻿Build started 2/28/2013 5:30:50 PM.
 Project "E:\database315\otherTeamApp2\DBApplication\DBApplication\DBApplication.vcxproj" on node 2 (Build target(s)).
 ClCompile:
   C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt menu.cpp
   menu.cpp
 e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(63): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(224): warning C4018: '<=' : signed/unsigned mismatch
-e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(242): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(264): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(292): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(322): warning C4018: '<' : signed/unsigned mismatch
-e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(348): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(233): warning C4018: '<=' : signed/unsigned mismatch
+e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(251): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(273): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(301): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(331): warning C4018: '<' : signed/unsigned mismatch
+e:\database315\otherteamapp2\dbapplication\dbapplication\menu.cpp(357): warning C4018: '<' : signed/unsigned mismatch
 Link:
   C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\database315\otherTeamApp2\DBApplication\Debug\DBApplication.exe" /INCREMENTAL /NOLOGO db_team07.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\database315\otherTeamApp2\DBApplication\Debug\DBApplication.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\database315\otherTeamApp2\DBApplication\Debug\DBApplication.lib" /MACHINE:X86 Debug\menu.obj
      Creating library E:\database315\otherTeamApp2\DBApplication\Debug\DBApplication.lib and object E:\database315\otherTeamApp2\DBApplication\Debug\DBApplication.exp
@@ -18,4 +18,4 @@ Done Building Project "E:\database315\otherTeamApp2\DBApplication\DBApplication\
 
 Build succeeded.
 
-Time Elapsed 00:00:05.34
+Time Elapsed 00:00:05.14
