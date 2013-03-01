@@ -7,6 +7,7 @@
 using namespace std;
 
 void printTable(Table* table);
+void printTable(Table table);
 vector<string> csvToVector(string csv);
 enum Table::RecordType whatIsType(string str);
 Table::ColumnList csvGetAttrs(string csvAttrs, string csvRec1);
@@ -41,7 +42,8 @@ int main()
 		cout << "\t(2) Resturants" << endl;
 		cout << "Or would you like to perform an action?" << endl;
 		cout << "\t(3) Print a table" << endl;
-		cout << "\t(4) Exit the program" << endl;
+		cout << "\t(4) Join two tables" << endl;
+		cout << "\t(5) Exit the program" << endl;
 		cin >> mainAns;
 
 		switch(mainAns) {
@@ -84,6 +86,32 @@ int main()
 					break;
 				}
 			case 4:
+				{	
+					cout << "Table Names: " << endl;
+					for (int i = 0; i < db.table_names().size(); i ++) {
+						cout << i << ": " << db.table_names()[i] << endl;
+					}
+
+					Table* firstTable;
+					Table* secondTable;
+					Table joinedTable;
+
+					string table1, table2;
+					cout << endl << "Enter first table name" << endl;
+					cin >> table1;
+					cout << "Enter second table name" << endl;
+					cin >> table2;
+
+					cout << "Thinking... this might take some time..." <<endl;
+					firstTable = db.table_if_exists(table1);
+					secondTable = db.table_if_exists(table2);
+
+					joinedTable = firstTable->cross_join(*secondTable);
+					printTable(joinedTable);
+
+					break;
+				}
+			case 5:
 				{
 					return 0;
 				}
@@ -216,12 +244,16 @@ int main()
 
 void printTable(Table* table)
 { 
+	printTable(*table);
+}
+
+void printTable(Table table) {
 	cout << "RESULT TABLE: " << endl;
 	cout << "-----------------------------" << endl;
-	for(int i=0; i<table->size(); i++)
+	for(int i=0; i<table.size(); i++)
 	{
-		Record::RecordIterator begin = table->at(i).begin();
-		Record::RecordIterator end = table->at(i).end();
+		Record::RecordIterator begin = table.at(i).begin();
+		Record::RecordIterator end = table.at(i).end();
 
 		for(Record::RecordIterator it = begin; it != end; it++)
 		{
