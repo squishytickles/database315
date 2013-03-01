@@ -10,13 +10,14 @@ void printTable(Table* table);
 vector<string> csvToVector(string csv);
 enum Table::RecordType whatIsType(string str);
 Table::ColumnList csvGetAttrs(string csvAttrs, string csvRec1);
-Database populateDB(string fileListName);
+void populateDB(Database& db, string fileListName);
 vector<pair<string,string>> assemblePairVector(vector<string> attrs, vector<string> values);
 
 int main()
 {
 	// create the database
-	Database db = populateDB("inputFileList");
+	Database db = Database();
+	populateDB(db,"inputFileList");
 
 	cout << "Read in files specified in inputFileList, database populated with " << db.table_names().size() << " tables." << endl;
 
@@ -28,183 +29,173 @@ int main()
 
 	string mainprompt = "What category do you want to search?\n(1)Customers\n(2)Resturants\nOR\n(3)Print a table\n(4)Exit";
 
-	cout << mainprompt << endl;
-	cin >> mainAns;
+	while (1==1) {
+		mainAns = 0;
+		custAns = 0;
+		restAns = 0;
+		cout << mainprompt << endl;
+		cin >> mainAns;
 
-	switch(mainAns) {
-		case 1:
-			{
-				cout << "Find customers based on: " << endl
-					 << "(1) Type of payment available" << endl
-					 << "(2) Preferred cuisine" << endl
-					 << "(3) By customer ID" << endl
-					 << "(4) Create a cutom query" << endl
-					 << "(5) Go back to main menu" << endl;
-				cin >> custAns;
-				break;
-			}
-		case 2:
-			{
-				cout << "Find restaurants based on: " << endl
-					 << "(1) Rating" << endl
-					 << "(2) Alcohol served" << endl
-					 << "(3) Parking available" << endl
-					 << "(4) Type of cuisine offered" << endl
-					 << "(5) Type of payment accepted" << endl
-					 << "(6) By restaurant ID" << endl
-					 << "(7) Create a custom query" << endl
-					 << "(8) Go back to main menu" << endl; 
-				cin >> restAns;
-				break;
-			}
-		case 3: 
-			{
-				cout << "Table Names: " << endl;
-				for (int i = 0; i < db.table_names().size(); i ++) {
-					cout << i << ": " << db.table_names()[i] << endl;
-				}
-
-				string table;
-				cout << "Which table do you want to print?" << endl;
-				cin >> table;
-				printTable(db.table_if_exists(table));
-			}
-		case 4:
-			{
-				return 0;
-			}
-	}
-
-	if (custAns != 0) {
-		switch(custAns) {
+		switch(mainAns) {
 			case 1:
 				{
-					cout << "Enter payment type: " << endl;
-					cin >> payment;
-
-					Table* result = db.query("userID", "userpayment.csv", "Upayment = '" + payment + "'");
-					printTable(result);
+					cout << "Find customers based on: " << endl
+						 << "(1) Type of payment available" << endl
+						 << "(2) Preferred cuisine" << endl
+						 << "(3) By customer ID" << endl
+						 << "(4) Create a cutom query" << endl
+						 << "(5) Go back to main menu" << endl;
+					cin >> custAns;
 					break;
 				}
 			case 2:
 				{
-					cout << "Enter cuisine type: " << endl;
-					cin >> food;
-
-					Table* result = db.query("userID", "usercuisine.csv", "Rcuisine = '" + food + "'");
-					printTable(result);
+					cout << "Find restaurants based on: " << endl
+						 << "(1) Rating" << endl
+						 << "(2) Alcohol served" << endl
+						 << "(3) Parking available" << endl
+						 << "(4) Type of cuisine offered" << endl
+						 << "(5) Type of payment accepted" << endl
+						 << "(6) By restaurant ID" << endl
+						 << "(7) Create a custom query" << endl
+						 << "(8) Go back to main menu" << endl; 
+					cin >> restAns;
 					break;
 				}
-			case 3:
+			case 3: 
 				{
-					cout << "Enter customer ID: " << endl;
-					cin >> userID;
+					cout << "Table Names: " << endl;
+					for (int i = 0; i < db.table_names().size(); i ++) {
+						cout << i << ": " << db.table_names()[i] << endl;
+					}
 
-					Table* result = db.query("*", "userprofile.csv", "userID = '" + userID + "'");
-					printTable(result);
+					string table;
+					cout << "Which table do you want to print?" << endl;
+					cin >> table;
+					printTable(db.table_if_exists(table));
 					break;
 				}
 			case 4:
 				{
-					cout << "Enter a select clause (comma separated list): " << endl;
-					cin >> selectClause;
-					cout << "Enter a where clause: " << endl;
-					cin >> whereClause;
-
-					Table* result = db.query(selectClause, "userprofile.csv", whereClause);
-					printTable(result);
-					break;
-				}
-			case 5:
-				{
-					custAns = 0;
-					restAns = 0;
-					cout << mainprompt << endl;
-					cin >> mainAns;
-					break;
+					return 0;
 				}
 		}
+
+		if (custAns != 0) {
+			switch(custAns) {
+				case 1:
+					{
+						cout << "Enter payment type: " << endl;
+						cin >> payment;
+
+						Table* result = db.query("userID", "userpayment.csv", "Upayment = '" + payment + "'");
+						printTable(result);
+						break;
+					}
+				case 2:
+					{
+						cout << "Enter cuisine type: " << endl;
+						cin >> food;
+
+						Table* result = db.query("userID", "usercuisine.csv", "Rcuisine = '" + food + "'");
+						printTable(result);
+						break;
+					}
+				case 3:
+					{
+						cout << "Enter customer ID: " << endl;
+						cin >> userID;
+
+						Table* result = db.query("*", "userprofile.csv", "userID = '" + userID + "'");
+						printTable(result);
+						break;
+					}
+				case 4:
+					{
+						cout << "Enter a select clause (comma separated list): " << endl;
+						cin.ignore();
+						getline(cin,selectClause);
+						cout << "Enter a where clause: " << endl;
+						getline(cin,whereClause);
+
+						Table* result = db.query(selectClause, "userprofile.csv", whereClause);
+						printTable(result);
+						break;
+					}
+			}
+		}
+
+		if (restAns != 0) {
+			switch(restAns) {
+				case 1:
+					{
+						cout << "Enter rating: " << endl;
+						cin >> rating;
+
+						Table* result = db.query("placeID", "rating_final.csv", "rating = '" + rating + "'");
+						printTable(result);
+						break;
+					}
+				case 2:
+					{
+						cout << "Enter alcohol type (No_Alcohol_Served, Wine-Beer, or Full_Bar): " << endl;
+						cin >> alcohol;
+
+						Table* result = db.query("placeID", "geoplaces2.csv", "alcohol = '" + alcohol + "'");
+						printTable(result);
+						break;
+					}
+				case 3:
+					{
+						cout << "Enter parking type (none, yes, public, valet parking, fee): " << endl;
+						cin >> parking;
+
+						Table* result = db.query("placeID", "chefmozparking.csv", "parking_lot = '" + parking + "'");
+						printTable(result);
+						break;
+					}
+				case 4:
+					{
+						cout << "Enter cuisine type: " << endl;
+						cin >> food;
+
+						Table* result = db.query("placeID", "chefmozcuisine.csv", "Rcuisine = '" + food + "'");
+						printTable(result);
+						break;
+					}
+				case 5:
+					{
+						cout << "Enter payment type: " << endl;
+						cin >> payment;
+
+						Table* result = db.query("placeID", "chefmozaccepts.csv", "Rpayment = '" + payment + "'");
+						printTable(result);
+						break;
+					}
+				case 6:
+					{
+						cout << "Enter restaurant ID: " << endl;
+						cin >> restID;
+
+						Table* result = db.query("*", "geoplaces2.csv", "placeID = '" + restID + "'");
+						printTable(result);
+						break;
+					}
+				case 7:
+					{
+						cout << "Enter a select clause (comma separated list): " << endl;
+						cin.ignore();
+						getline(cin,selectClause);
+						cout << "Enter a where clause: " << endl;
+						getline(cin,whereClause);
+
+						Table* result = db.query(selectClause, "geoplaces2.csv", whereClause);
+						printTable(result);
+						break;
+					}
+			}	  
+		}
 	}
-
-	if (restAns != 0) {
-		switch(restAns) {
-			case 1:
-				{
-					cout << "Enter rating: " << endl;
-					cin >> rating;
-
-					Table* result = db.query("placeID", "rating_final.csv", "rating = '" + rating + "'");
-					printTable(result);
-					break;
-				}
-			case 2:
-				{
-					cout << "Enter alcohol type (No_Alcohol_Served, Wine-Beer, or Full_Bar): " << endl;
-					cin >> alcohol;
-
-					Table* result = db.query("placeID", "geoplaces2.csv", "alcohol = '" + alcohol + "'");
-					printTable(result);
-					break;
-				}
-			case 3:
-				{
-					cout << "Enter parking type (none, yes, public, valet parking, fee): " << endl;
-					cin >> parking;
-
-					Table* result = db.query("placeID", "chefmozparking.csv", "parking_lot = '" + parking + "'");
-					printTable(result);
-					break;
-				}
-			case 4:
-				{
-					cout << "Enter cuisine type: " << endl;
-					cin >> food;
-
-					Table* result = db.query("placeID", "chefmozcuisine.csv", "Rcuisine = '" + food + "'");
-					printTable(result);
-					break;
-				}
-			case 5:
-				{
-					cout << "Enter payment type: " << endl;
-					cin >> payment;
-
-					Table* result = db.query("placeID", "chefmozaccepts.csv", "Rpayment = '" + payment + "'");
-					printTable(result);
-					break;
-				}
-			case 6:
-				{
-					cout << "Enter restaurant ID: " << endl;
-					cin >> restID;
-
-					Table* result = db.query("*", "geoplaces2.csv", "placeID = '" + restID + "'");
-					printTable(result);
-					break;
-				}
-			case 7:
-				{
-					cout << "Enter a select clause (comma separated list): " << endl;
-					cin >> selectClause;
-					cout << "Enter a where clause: " << endl;
-					cin >> whereClause;
-
-					Table* result = db.query(selectClause, "geoplaces2.csv", whereClause);
-					printTable(result);
-					break;
-				}
-			case 8:
-				{
-					custAns = 0;
-					restAns = 0;
-					cout << mainprompt << endl;
-					cin >> mainAns;
-					break;
-				}
-		}	  
-	}
-	
-	exit(0);
 }
 
 void printTable(Table* table)
@@ -278,10 +269,9 @@ Table::ColumnList csvGetAttrs(string csvAttrs, string csvRec1) {
 }
 
 // read in the files and return a database
-Database populateDB(string fileListName) {
+void populateDB(Database& db, string fileListName) {
 	cout << "Loading files specified in inputFileList, gimmie a minute..." << endl;
 	// create the database to return
-	Database db = Database();
 	
 	// read in the inputFileList
 	vector<string> inputFiles;
@@ -344,8 +334,6 @@ Database populateDB(string fileListName) {
 		//system("PAUSE");
 		db.add_table(inputFiles[i],newTable);
 	}
-	
-	return db;
 }
 
 vector<pair<string,string>> assemblePairVector(vector<string> attrs, vector<string> values) {
