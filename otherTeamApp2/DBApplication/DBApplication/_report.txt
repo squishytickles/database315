@@ -1,0 +1,22 @@
+Assignment I Report
+
+Graham Leslie
+Sarah Vance
+Ryan Finke
+
+Group 26
+
+I: Simply paste the csv files you want imported into the database
+   in to the root directory, and add their filenames into the 
+   inputFileList file.  Then, the program will automatically load
+   them on launch, and name each table with the name of the file.
+
+To use, run the program and select one of the options there.
+
+II: It was simple enough to load in tables with their functions in      
+    the DLL, and also simple to run queries and present the results.
+    This group's database was extremely well documented and easy
+    to use.
+
+III: We were able to use all aspects of this database system, and we
+     were not held back by any aspects of the provided database.

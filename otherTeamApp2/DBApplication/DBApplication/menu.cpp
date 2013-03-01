@@ -33,32 +33,40 @@ int main()
 		mainAns = 0;
 		custAns = 0;
 		restAns = 0;
-		cout << mainprompt << endl;
+		cout << endl;
+		cout << "PROMPT" << endl;
+		cout << "-----------------------------" << endl;
+		cout << "Would you like to search from a category?" << endl;
+		cout << "\t(1) Customers" << endl;
+		cout << "\t(2) Resturants" << endl;
+		cout << "Or would you like to perform an action?" << endl;
+		cout << "\t(3) Print a table" << endl;
+		cout << "\t(4) Exit the program" << endl;
 		cin >> mainAns;
 
 		switch(mainAns) {
 			case 1:
 				{
 					cout << "Find customers based on: " << endl
-						 << "(1) Type of payment available" << endl
-						 << "(2) Preferred cuisine" << endl
-						 << "(3) By customer ID" << endl
-						 << "(4) Create a cutom query" << endl
-						 << "(5) Go back to main menu" << endl;
+						 << "\t(1) Type of payment available" << endl
+						 << "\t(2) Preferred cuisine" << endl
+						 << "\t(3) By customer ID" << endl
+						 << "\t(4) Create a cutom query" << endl
+						 << "\t(5) Go back to main menu" << endl;
 					cin >> custAns;
 					break;
 				}
 			case 2:
 				{
 					cout << "Find restaurants based on: " << endl
-						 << "(1) Rating" << endl
-						 << "(2) Alcohol served" << endl
-						 << "(3) Parking available" << endl
-						 << "(4) Type of cuisine offered" << endl
-						 << "(5) Type of payment accepted" << endl
-						 << "(6) By restaurant ID" << endl
-						 << "(7) Create a custom query" << endl
-						 << "(8) Go back to main menu" << endl; 
+						 << "\t(1) Rating" << endl
+						 << "\t(2) Alcohol served" << endl
+						 << "\t(3) Parking available" << endl
+						 << "\t(4) Type of cuisine offered" << endl
+						 << "\t(5) Type of payment accepted" << endl
+						 << "\t(6) By restaurant ID" << endl
+						 << "\t(7) Create a custom query" << endl
+						 << "\t(8) Go back to main menu" << endl; 
 					cin >> restAns;
 					break;
 				}
@@ -78,6 +86,10 @@ int main()
 			case 4:
 				{
 					return 0;
+				}
+			default: 
+				{
+					cout << "Sure you typed that in right?" << endl;
 				}
 		}
 
@@ -122,6 +134,8 @@ int main()
 						printTable(result);
 						break;
 					}
+				default:
+					{ }
 			}
 		}
 
@@ -193,6 +207,8 @@ int main()
 						printTable(result);
 						break;
 					}
+				default:
+					{ }
 			}	  
 		}
 	}
@@ -201,6 +217,7 @@ int main()
 void printTable(Table* table)
 { 
 	cout << "RESULT TABLE: " << endl;
+	cout << "-----------------------------" << endl;
 	for(int i=0; i<table->size(); i++)
 	{
 		Record::RecordIterator begin = table->at(i).begin();
@@ -208,11 +225,12 @@ void printTable(Table* table)
 
 		for(Record::RecordIterator it = begin; it != end; it++)
 		{
-			cout << it->second << endl;
+			cout << it->first << ":\t\t" << it->second << endl;
 		}
 
-			cout << endl;
+		cout << endl;
 	}
+	cout << "-----------------------------" << endl;
 	cout << "END OF TABLE" << endl;
 }
 
